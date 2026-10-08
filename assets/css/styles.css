@@ -1602,10 +1602,3 @@ html {
     border-radius: 2rem;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .blob-animate,
-  .testimonial__content {
-    animation: none;
-  }
-}

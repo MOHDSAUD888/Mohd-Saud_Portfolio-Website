@@ -35,7 +35,6 @@ const boldify = (s) => multiline(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 const splitList = (s) => String(s ?? "").split(/[,;\n]/).map((x) => x.trim()).filter(Boolean);
 const isVisible = (row) => String(row.visible ?? "yes").trim().toLowerCase() !== "no";
 const pad = (n) => String(n).padStart(2, "0");
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 // Screens >= 2048px use "body { zoom: 1.4 }": mouse and scroll positions are zoomed, element offsets are not
 const bodyZoom = () => parseFloat(getComputedStyle(document.body).zoom) || 1;
 let zoom = bodyZoom();
@@ -382,7 +381,7 @@ function renderRole(p) {
 }
 
 function startSplitText() {
-  if (typeof anime === "undefined" || reduceMotion.matches) return;
+  if (typeof anime === "undefined") return;
   const { animate, text, stagger } = anime;
   const { chars: chars1 } = text.split(".home__profession-1", { chars: true });
   const { chars: chars2 } = text.split(".home__profession-2", { chars: true });
@@ -408,7 +407,7 @@ function startSwiper(count) {
     slidesPerView: "auto",
     grabCursor: true,
     speed: 600,
-    autoplay: reduceMotion.matches ? false : { delay: 3000, disableOnInteraction: false },
+    autoplay: { delay: 3000, disableOnInteraction: false },
   });
 
   // One bullet per real project (the repeated cards share the same bullets)
