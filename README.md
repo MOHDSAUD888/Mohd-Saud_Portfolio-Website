@@ -63,6 +63,6 @@ assets/vendor/           third-party libraries (see below)
 | [ScrollReveal](https://scrollrevealjs.org) 4.0.9 | scroll animations | GPL-3.0 (free for non-commercial / open-source use) |
 | [SheetJS](https://sheetjs.com) 0.20.3 (mini) | reading the Excel file in the browser | Apache-2.0 |
 | [Remix Icon](https://remixicon.com) 4.6.0 | icons (inline SVG sprite) | Apache-2.0 |
-| Montserrat, Unbounded | fonts | SIL Open Font License |
+| Montserrat, Unbounded, Sora | fonts | SIL Open Font License |
 
 Everything is served from this repository, so the site doesn't depend on any CDN.
