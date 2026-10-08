@@ -1,11 +1,18 @@
 /* =====================================================================
-   main.js: renders the content from data.js (or the Google Sheet)
-   and adds all interactions. You normally don't need to edit this file.
+   main.js
+   1. Loads the content: Google Sheet -> Excel file -> data.js
+   2. Renders every section from that content
+   3. Starts the same interactions as the original design:
+      anime.js title, Swiper carousel, work tabs, services cards,
+      testimonials, copy email, active link, custom cursor, ScrollReveal
+   You normally don't need to edit this file.
    ===================================================================== */
 
 /*=============== HELPERS ===============*/
-// Sheet text could be edited by anyone with access, so escape it before
-// putting it into HTML, and only allow http(s) / mailto / relative links.
+const $ = (sel) => document.querySelector(sel);
+
+// Content can come from a spreadsheet, so escape it before putting it into
+// HTML, and only allow http(s) / mailto / relative links.
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const safeUrl = (u) => {
@@ -14,21 +21,43 @@ const safeUrl = (u) => {
   if (url && !/^[a-z][a-z0-9+.-]*:/i.test(url)) return url; // relative path like assets/img/x.png
   return "";
 };
-const boldify = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
-const splitList = (s) => String(s ?? "").split(/[,;]/).map((x) => x.trim()).filter(Boolean);
-const isVisible = (row) => String(row.visible ?? "yes").trim().toLowerCase() !== "no";
-const pad = (n) => String(n).padStart(2, "0");
-const $ = (sel) => document.querySelector(sel);
-// Icons come from the SVG sprite at the top of index.html
-const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#ri-${name}"></use></svg>`;
 // "github.com/user" or "www.linkedin.com/in/x" typed without https:// -> add it
 const normalizeLink = (u) => {
   const url = String(u ?? "").trim();
   return /^(www\.|[a-z0-9-]+\.(com|in|io|dev|me|org|net|app|co)(\/|$))/i.test(url) ? "https://" + url : url;
 };
+const link = (u) => safeUrl(normalizeLink(u));
+// Icons come from the SVG sprite at the top of index.html
+const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#ri-${name}"></use></svg>`;
+// Alt+Enter inside an Excel cell = new line on the site
+const multiline = (s) => esc(s).replace(/\r?\n/g, "<br />");
+const boldify = (s) => multiline(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+const splitList = (s) => String(s ?? "").split(/[,;\n]/).map((x) => x.trim()).filter(Boolean);
+const isVisible = (row) => String(row.visible ?? "yes").trim().toLowerCase() !== "no";
+const pad = (n) => String(n).padStart(2, "0");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-/*=============== GOOGLE SHEET LOADER ===============*/
-// Small CSV parser: handles quotes, commas and line breaks inside cells.
+/*=============== CONTENT LOADING ===============*/
+const TABS = ["Profile", "Projects", "Experience", "Services", "Testimonials"];
+
+// Each tab must have these columns, otherwise it is ignored and data.js is used.
+// (Google returns the FIRST tab when a tab name is wrong, so this check matters.)
+const REQUIRED = {
+  Profile: ["key", "value"],
+  Projects: ["title", "stack"],
+  Experience: ["type", "title"],
+  Services: ["title", "items"],
+  Testimonials: ["name", "text"],
+};
+
+// First row = column names. "Stack (comma separated)" becomes "stack".
+function rowsToObjects(rows) {
+  const [head = [], ...body] = rows.filter((r) => r.some((c) => String(c ?? "").trim() !== ""));
+  const keys = head.map((h) => String(h).split("(")[0].trim().toLowerCase().replace(/\s+/g, "_"));
+  return body.map((r) => Object.fromEntries(keys.map((k, i) => [k, String(r[i] ?? "").trim()])));
+}
+
+// Small CSV parser (Google Sheet): handles quotes, commas and line breaks inside cells.
 function parseCSV(text) {
   const rows = [];
   let row = [], cell = "", inQuotes = false;
@@ -46,132 +75,185 @@ function parseCSV(text) {
     } else cell += ch;
   }
   if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter((r) => r.some((c) => c.trim() !== ""));
-}
-
-// First row = column names. "Stack (comma separated)" becomes "stack".
-function csvToObjects(text) {
-  const [head = [], ...body] = parseCSV(text);
-  const keys = head.map((h) => h.split("(")[0].trim().toLowerCase().replace(/\s+/g, "_"));
-  return body.map((r) => Object.fromEntries(keys.map((k, i) => [k, (r[i] ?? "").trim()])));
-}
-
-// Each tab must have these columns, otherwise we ignore it and use defaults.
-// (Google returns the FIRST tab when a tab name is wrong, so this check matters.)
-const REQUIRED = {
-  Profile: ["key", "value"],
-  Projects: ["title", "stack"],
-  Experience: ["type", "title"],
-  Services: ["title", "items"],
-  Testimonials: ["name", "text"],
-};
-
-async function loadTab(sheetId, tab) {
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`${tab}: HTTP ${res.status}`);
-  const rows = csvToObjects(await res.text());
-  const cols = rows.length ? Object.keys(rows[0]) : [];
-  if (!REQUIRED[tab].every((c) => cols.includes(c))) throw new Error(`${tab}: missing columns`);
   return rows;
 }
 
-async function loadFromSheet(defaults) {
-  const match = String(typeof SHEET_URL === "string" ? SHEET_URL : "").match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (!match) return null;
-  const id = match[1];
-  const tabs = ["Profile", "Projects", "Experience", "Services", "Testimonials"];
-  const results = await Promise.allSettled(tabs.map((t) => loadTab(id, t)));
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error(`could not load ${src}`));
+    document.head.appendChild(s);
+  });
+}
+
+// Google Sheet shared as "Anyone with the link -> Viewer"
+async function loadGoogleTabs(url) {
+  const match = String(url).match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (!match) throw new Error("SHEET_URL is not a Google Sheets link");
+  const results = await Promise.allSettled(
+    TABS.map(async (tab) => {
+      const csvUrl = `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(tab)}`;
+      const res = await fetch(csvUrl, { cache: "no-store" });
+      if (!res.ok) throw new Error(`${tab}: HTTP ${res.status}`);
+      return rowsToObjects(parseCSV(await res.text()));
+    })
+  );
+  return Object.fromEntries(TABS.map((tab, i) => [tab, results[i].status === "fulfilled" ? results[i].value : null]));
+}
+
+// portfolio-data.xlsx in the repo, read in the browser with SheetJS
+async function loadExcelTabs(file) {
+  const res = await fetch(file, { cache: "no-cache" });
+  if (!res.ok) throw new Error(`${file}: HTTP ${res.status}`);
+  const buffer = await res.arrayBuffer();
+  if (typeof XLSX === "undefined") await loadScript("assets/vendor/xlsx.mini.min.js");
+  const workbook = XLSX.read(buffer, { type: "array" });
+  return Object.fromEntries(
+    TABS.map((tab) => {
+      const sheet = workbook.Sheets[tab];
+      if (!sheet) return [tab, null];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "", raw: false, blankrows: false });
+      return [tab, rowsToObjects(rows)];
+    })
+  );
+}
+
+// Merge the loaded tabs over data.js. A tab that is missing or has the wrong
+// columns keeps the data.js content, so the site never breaks.
+function mergeTabs(defaults, tabs) {
   const data = structuredClone(defaults);
-  results.forEach((r, i) => {
-    const tab = tabs[i];
-    if (r.status === "rejected") { console.warn("Sheet tab skipped:", r.reason.message); return; }
+  TABS.forEach((tab) => {
+    const rows = tabs[tab];
+    // A list tab with only the header row simply means "nothing here" (e.g. no testimonials yet)
+    if (rows && rows.length === 0 && tab !== "Profile") {
+      data[tab.toLowerCase()] = [];
+      return;
+    }
+    const cols = rows && rows.length ? Object.keys(rows[0]) : [];
+    if (!rows || !REQUIRED[tab].every((c) => cols.includes(c))) {
+      if (rows) console.warn(`"${tab}" tab skipped: missing columns ${REQUIRED[tab].join(", ")}`);
+      return;
+    }
     if (tab === "Profile") {
-      r.value.forEach(({ key, value }) => { if (key) data.profile[key.trim()] = value; });
+      rows.forEach(({ key, value }) => {
+        if (key) data.profile[key.trim()] = value;
+      });
     } else {
-      data[tab.toLowerCase()] = r.value;
+      data[tab.toLowerCase()] = rows;
     }
   });
   return data;
 }
 
-/*=============== RENDER: PROFILE ===============*/
-function setLink(id, url) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const safe = safeUrl(normalizeLink(url));
-  el.hidden = !safe;
-  if (safe) el.href = safe;
+async function loadContent() {
+  const sources = [];
+  if (typeof SHEET_URL === "string" && SHEET_URL.trim()) sources.push(["Google Sheet", () => loadGoogleTabs(SHEET_URL)]);
+  if (typeof EXCEL_FILE === "string" && EXCEL_FILE.trim()) sources.push(["Excel file", () => loadExcelTabs(EXCEL_FILE)]);
+
+  for (const [name, load] of sources) {
+    try {
+      const tabs = await load();
+      if (Object.values(tabs).some(Boolean)) return mergeTabs(DEFAULT_DATA, tabs);
+    } catch (err) {
+      console.warn(`${name} not loaded:`, err.message);
+    }
+  }
+  return structuredClone(DEFAULT_DATA);
 }
 
-function splitChars(el) {
-  const text = el.textContent;
-  el.setAttribute("aria-label", text);
-  el.innerHTML = [...text]
-    .map((ch, i) => `<span class="char" aria-hidden="true" style="--i:${i}">${ch === " " ? "&nbsp;" : esc(ch)}</span>`)
-    .join("");
-}
+/*=============== RENDER: PROFILE, SOCIAL LINKS, CONTACT ===============*/
+const SOCIALS = [
+  ["linkedin", "LinkedIn", "linkedin-fill"],
+  ["github", "GitHub", "github-line"],
+  ["x", "X", "twitter-x-line"],
+  ["instagram", "Instagram", "instagram-line"],
+  ["facebook", "Facebook", "facebook-line"],
+  ["youtube", "YouTube", "youtube-line"],
+  ["tiktok", "TikTok", "tiktok-line"],
+];
+const WRITE_LINKS = [
+  ["whatsapp", "WhatsApp"],
+  ["telegram", "Telegram"],
+  ["messenger", "Messenger"],
+];
+
+const contactLink = (url, label, external = true) =>
+  `<a href="${esc(url)}"${external ? ' target="_blank" rel="noopener"' : ""} class="contact__link">${esc(label)} ${icon("arrow-right-up-long-line")}</a>`;
 
 function renderProfile(p) {
   document.querySelectorAll("[data-profile]").forEach((el) => {
     const value = p[el.dataset.profile];
     if (value) el.textContent = value;
   });
-  document.querySelectorAll(".split-text").forEach(splitChars);
   $("#about-text").innerHTML = boldify(p.about_text);
 
-  const mail = p.email ? `mailto:${p.email}` : "";
-  setLink("social-linkedin", p.linkedin);
-  setLink("social-github", p.github);
-  setLink("social-email", mail);
-  setLink("contact-linkedin", p.linkedin);
-  setLink("contact-github", p.github);
-  setLink("contact-mail", mail);
-  setLink("contact-whatsapp", p.whatsapp);
+  const heroImage = safeUrl(p.hero_image);
+  if (heroImage) $("#hero-image").src = heroImage;
+  const aboutImage = safeUrl(p.about_image);
+  if (aboutImage) $("#about-image").src = aboutImage;
 
   const resume = safeUrl(p.resume);
   document.querySelectorAll(".resume-link").forEach((a) => {
     a.hidden = !resume;
     if (resume) a.href = resume;
   });
+
+  const socials = SOCIALS.map(([key, label, ic]) => [link(p[key]), label, ic]).filter(([url]) => url);
+  $("#home-social").innerHTML = socials
+    .map(([url, label, ic]) => `<a href="${esc(url)}" target="_blank" rel="noopener" class="home__social-link" aria-label="${label}">${icon(ic)}</a>`)
+    .join("");
+  $("#contact-social").innerHTML = socials.map(([url, label]) => contactLink(url, label)).join("");
+
+  const write = WRITE_LINKS.map(([key, label]) => [link(p[key]), label]).filter(([url]) => url);
+  const email = String(p.email ?? "").trim();
+  $("#contact-write").innerHTML =
+    write.map(([url, label]) => contactLink(url, label)).join("") + (email ? contactLink(`mailto:${email}`, "Email", false) : "");
 }
 
 /*=============== RENDER: PROJECTS ===============*/
-function renderProjects(projects) {
-  const list = projects.filter(isVisible);
-  $("#projects-track").innerHTML = list
-    .map((p, i) => {
-      const done = String(p.status).trim().toLowerCase().startsWith("complete");
-      const img = safeUrl(p.image);
-      const link = safeUrl(normalizeLink(p.link));
-      const media = img
-        ? `<img src="${esc(img)}" alt="Screenshot of ${esc(p.title)}" class="projects__img" loading="lazy" />`
-        : `<div class="projects__placeholder">${icon("cloud-line")}<span>Screenshot coming soon</span></div>`;
-      return `
-      <article class="projects__card">
-        <div class="blob"></div>
-        <div class="projects__number">
-          <h1>${pad(i + 1)}</h1>
-          <h3>${esc(p.category || "Project")}</h3>
-        </div>
-        <div class="projects__data">
-          <h1 class="projects__title">${esc(p.title)}</h1>
-          <p class="projects__subtitle">Techstack used</p>
-          <p class="projects__description">${esc(splitList(p.stack).join(", "))}</p>
-          ${p.status ? `<span class="projects__status ${done ? "done" : ""}">${done ? "Completed" : esc(p.status)}</span>` : ""}
-        </div>
-        <div class="projects__image">
-          ${media}
-          ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener" class="projects__button" aria-label="Open ${esc(p.title)}">${icon("arrow-right-up-line")}</a>` : ""}
-        </div>
-      </article>`;
-    })
-    .join("");
+function projectCard(p, i) {
+  const done = String(p.status).trim().toLowerCase().startsWith("complete");
+  const img = safeUrl(p.image);
+  const url = link(p.link);
+  const media = img
+    ? `<img src="${esc(img)}" alt="Screenshot of ${esc(p.title)}" class="projects__img" loading="lazy" />`
+    : `<div class="projects__placeholder">${icon("cloud-line")}<span>Screenshot coming soon</span></div>`;
+  return `
+    <article class="projects__card swiper-slide">
+      <div class="blob"></div>
 
-  $("#projects-dots").innerHTML = list
-    .map((_, i) => `<button class="projects__dot${i === 0 ? " active" : ""}" data-index="${i}" aria-label="Go to project ${i + 1}"></button>`)
+      <div class="projects__number">
+        <h1>${pad(i + 1)}</h1>
+        <h3>${esc(p.category || "Project")}</h3>
+      </div>
+
+      <div class="projects__data">
+        <h1 class="projects__title">${multiline(p.title)}</h1>
+        <p class="projects__subtitle">Techstack used</p>
+        <p class="projects__description">${esc(splitList(p.stack).join(", "))}</p>
+        ${p.status ? `<span class="projects__status ${done ? "done" : ""}">${done ? "Completed" : esc(p.status)}</span>` : ""}
+      </div>
+
+      <div class="projects__image">
+        ${media}
+        ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" class="projects__button" aria-label="Open ${esc(p.title)}">${icon("arrow-right-up-long-line")}</a>` : ""}
+      </div>
+    </article>`;
+}
+
+// Returns the number of real (not repeated) projects
+function renderProjects(projects) {
+  const cards = projects.filter(isVisible).map(projectCard);
+  // Swiper's loop mode needs more slides than fit on the screen, so with only
+  // a few projects the cards are repeated (the original design had 8 projects).
+  const copies = cards.length ? Math.ceil(8 / cards.length) : 0;
+  $("#projects-wrapper").innerHTML = Array.from({ length: copies }, () => cards.join("")).join("");
+  $("#projects-pagination").innerHTML = cards
+    .map((_, i) => `<span class="swiper-pagination-bullet" role="button" tabindex="0" data-index="${i}" aria-label="Go to project ${i + 1}"></span>`)
     .join("");
-  updateDots();
+  return cards.length;
 }
 
 /*=============== RENDER: EXPERIENCE / EDUCATION ===============*/
@@ -180,20 +262,21 @@ function workCard(w) {
     <div class="work__card">
       <div class="work__data">
         <div>
-          <h1 class="work__title">${esc(w.title)}</h1>
-          <h3 class="work__subtitle">${esc(w.organization)}</h3>
+          <h1 class="work__title">${multiline(w.title)}</h1>
+          <h3 class="work__subtitle">${multiline(w.organization)}</h3>
         </div>
-        <h2 class="work__year">${esc(w.period)}</h2>
+        <h2 class="work__year">${multiline(w.period)}</h2>
       </div>
-      <p class="work__description">${esc(w.description)}</p>
+
+      <p class="work__description">${multiline(w.description)}</p>
     </div>`;
 }
 
 function renderWork(rows) {
   const visible = rows.filter(isVisible);
-  const isEdu = (w) => String(w.type).trim().toLowerCase().startsWith("edu");
-  $("#experience").innerHTML = visible.filter((w) => !isEdu(w)).map(workCard).join("");
-  $("#education").innerHTML = visible.filter(isEdu).map(workCard).join("");
+  const isEducation = (w) => String(w.type).trim().toLowerCase().startsWith("edu");
+  $("#experience").innerHTML = visible.filter((w) => !isEducation(w)).map(workCard).join("");
+  $("#education").innerHTML = visible.filter(isEducation).map(workCard).join("");
 }
 
 /*=============== RENDER: SERVICES ===============*/
@@ -201,20 +284,23 @@ function renderServices(rows) {
   $("#services-container").innerHTML = rows
     .filter(isVisible)
     .map(
-      (s) => `
+      (s, i) => `
       <div class="services__card services__close">
-        <div class="blob"></div>
+        <div class="blob${i % 2 ? " blob-2" : ""}"></div>
+
         <div class="services__data">
-          <h2 class="services__title">${esc(s.title)}</h2>
-          <p class="services__description">${esc(s.description)}</p>
+          <h2 class="services__title">${multiline(s.title)}</h2>
+          <p class="services__description">${multiline(s.description)}</p>
         </div>
+
         <div class="services__info">
           <h3 class="services__subtitle">${esc(s.subtitle || "Skills")}</h3>
           <ul class="services__skills">
             ${splitList(s.items).map((x) => `<li class="services__skill">${esc(x)}</li>`).join("")}
           </ul>
         </div>
-        <button class="services__button" aria-label="Show ${esc(s.title)} skills" aria-expanded="false">
+
+        <button class="services__button" aria-label="Show ${esc(s.title)}" aria-expanded="false">
           ${icon("arrow-down-s-line")}
         </button>
       </div>`
@@ -223,208 +309,253 @@ function renderServices(rows) {
 }
 
 /*=============== RENDER: TESTIMONIALS ===============*/
+function testimonialCard(t) {
+  const img = safeUrl(t.image);
+  const rating = Number(String(t.rating).replace(",", "."));
+  const photo = img
+    ? `<img src="${esc(img)}" alt="${esc(t.name)}" class="testimonials__img" loading="lazy" />`
+    : `<div class="testimonials__avatar">${esc(String(t.name).trim().charAt(0).toUpperCase())}</div>`;
+  return `
+    <article class="testimonials__card">
+      <div class="blob"></div>
+
+      <div class="testimonials__data">
+        ${photo}
+        <h2 class="testimonials__name">${esc(t.name)}</h2>
+        ${t.role ? `<p class="testimonials__role">${esc(t.role)}</p>` : ""}
+        ${
+          rating > 0
+            ? `<div class="testimonial__rating">
+                 <div class="testimonial__stars">${icon("star-line").repeat(5)}</div>
+                 <h3 class="testimonials__number">${Math.min(rating, 5).toFixed(1)}</h3>
+               </div>`
+            : ""
+        }
+        <p>${multiline(t.text)}</p>
+      </div>
+    </article>`;
+}
+
 function renderTestimonials(rows) {
   const list = rows.filter((t) => isVisible(t) && String(t.text ?? "").trim());
   $("#testimonials").hidden = list.length === 0;
   if (!list.length) return;
-
-  const card = (t) => {
-    const img = safeUrl(t.image);
-    const rating = Math.max(0, Math.min(5, Math.round(Number(t.rating) || 0)));
-    const stars = rating ? `<div class="testimonials__rating">${icon("star-fill").repeat(rating)}</div>` : "";
-    const photo = img
-      ? `<img src="${esc(img)}" alt="${esc(t.name)}" class="testimonials__img" loading="lazy" />`
-      : `<div class="testimonials__avatar">${esc(String(t.name).trim().charAt(0).toUpperCase())}</div>`;
-    return `
-      <article class="testimonials__card">
-        <div class="blob"></div>
-        <div class="testimonials__data">
-          ${photo}
-          <h2 class="testimonials__name">${esc(t.name)}</h2>
-          <p class="testimonials__role">${esc(t.role)}</p>
-          ${stars}
-          <p>${esc(t.text)}</p>
-        </div>
-      </article>`;
-  };
-  // The cards are written twice so the strip can loop without a gap.
-  const html = list.map(card).join("");
-  $("#testimonials-track").innerHTML = html + html;
+  // Each row must be wider than the screen, then it is written twice so the
+  // strip can slide by -50% and start again without a visible jump.
+  const half = Array.from({ length: Math.ceil(6 / list.length) }, () => list.map(testimonialCard).join("")).join("");
+  $("#testimonials-row-1").innerHTML = half + half;
+  $("#testimonials-row-2").innerHTML = half + half;
 }
 
-/*=============== RENDER ALL ===============*/
 function renderAll(data) {
   renderProfile(data.profile);
-  renderProjects(data.projects);
   renderWork(data.experience);
   renderServices(data.services);
   renderTestimonials(data.testimonials);
-  setupReveal();
+  return renderProjects(data.projects);
 }
 
-/*=============== PROJECTS CAROUSEL (autoplay + dots) ===============*/
-const track = $("#projects-track");
-let carouselPaused = false;
-
-const cardStep = () => {
-  const card = track.querySelector(".projects__card");
-  if (!card) return 0;
-  return card.offsetWidth + parseFloat(getComputedStyle(track).columnGap || 24);
-};
-
-// Hide the dots when all cards already fit on screen
-function updateDots() {
-  const t = $("#projects-track");
-  $("#projects-dots").hidden = t.scrollWidth <= t.clientWidth + 5;
+/*=============== HOME SPLIT TEXT (anime.js) ===============*/
+function startSplitText() {
+  if (typeof anime === "undefined" || reduceMotion.matches) return;
+  const { animate, text, stagger } = anime;
+  const { chars: chars1 } = text.split(".home__profession-1", { chars: true });
+  const { chars: chars2 } = text.split(".home__profession-2", { chars: true });
+  const options = {
+    y: [{ to: ["100%", "0%"] }, { to: "-100%", delay: 4000, ease: "in(3)" }],
+    duration: 900,
+    ease: "out(3)",
+    delay: stagger(80),
+    loop: true,
+  };
+  animate(chars1, options);
+  animate(chars2, options);
 }
-window.addEventListener("resize", updateDots);
 
-track.addEventListener("scroll", () => {
-  const step = cardStep();
-  if (!step) return;
-  const dots = document.querySelectorAll(".projects__dot");
-  const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 5;
-  // the last card can't scroll fully to the left edge, so "at the end" = last dot
-  const index = atEnd ? dots.length - 1 : Math.round(track.scrollLeft / step);
-  dots.forEach((d, i) => d.classList.toggle("active", i === index));
-});
+/*=============== SWIPER PROJECTS ===============*/
+function startSwiper(count) {
+  if (!count || typeof Swiper === "undefined") return;
+  const swiperProjects = new Swiper(".projects__swiper", {
+    loop: true,
+    spaceBetween: 24,
+    slidesPerView: "auto",
+    grabCursor: true,
+    speed: 600,
+    autoplay: reduceMotion.matches ? false : { delay: 3000, disableOnInteraction: false },
+  });
 
-$("#projects-dots").addEventListener("click", (e) => {
-  const dot = e.target.closest(".projects__dot");
-  if (dot) track.scrollTo({ left: Number(dot.dataset.index) * cardStep() });
-});
-
-["mouseenter", "touchstart", "focusin"].forEach((ev) => track.addEventListener(ev, () => (carouselPaused = true), { passive: true }));
-["mouseleave", "touchend", "focusout"].forEach((ev) => track.addEventListener(ev, () => (carouselPaused = false), { passive: true }));
-
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-setInterval(() => {
-  if (carouselPaused || document.hidden || reduceMotion.matches) return;
-  const max = track.scrollWidth - track.clientWidth;
-  if (max <= 0) return;
-  const next = track.scrollLeft + cardStep();
-  track.scrollTo({ left: next > max + 5 ? 0 : next });
-}, 3500);
+  // One bullet per real project (the repeated cards share the same bullets)
+  const bullets = document.querySelectorAll("#projects-pagination .swiper-pagination-bullet");
+  const update = () =>
+    bullets.forEach((b, i) => b.classList.toggle("swiper-pagination-bullet-active", i === swiperProjects.realIndex % count));
+  const goTo = (i) => {
+    const current = swiperProjects.realIndex;
+    swiperProjects.slideToLoop(current - (current % count) + i);
+  };
+  swiperProjects.on("slideChange", update);
+  update();
+  bullets.forEach((b) => {
+    b.addEventListener("click", () => goTo(Number(b.dataset.index)));
+    b.addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), goTo(Number(b.dataset.index))));
+  });
+}
 
 /*=============== WORK TABS ===============*/
-document.querySelectorAll("[data-target]").forEach((tab) => {
+const tabs = document.querySelectorAll("[data-target]"),
+  tabContents = document.querySelectorAll("[data-content]");
+
+tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
-    document.querySelectorAll("[data-content]").forEach((c) => c.classList.remove("work-active"));
-    document.querySelectorAll("[data-target]").forEach((t) => t.classList.remove("work-active"));
+    const targetContent = document.querySelector(tab.dataset.target);
+    // Disable all content and active tabs
+    tabContents.forEach((content) => content.classList.remove("work-active"));
+    tabs.forEach((t) => t.classList.remove("work-active"));
+    // Activate the tab and its content
     tab.classList.add("work-active");
-    $(tab.dataset.target).classList.add("work-active");
+    targetContent.classList.add("work-active");
   });
 });
 
-/*=============== SERVICES ACCORDION ===============*/
-// One click listener on the container works even after cards are re-rendered.
+/*=============== SERVICES ===============*/
+// One listener on the container also works for cards rendered later.
 $("#services-container").addEventListener("click", (e) => {
-  const card = e.target.closest(".services__card");
-  // Clicks on the skill chips should not close the card
-  if (!card || (e.target.closest(".services__info") && !e.target.closest(".services__button"))) return;
-  const wasOpen = card.classList.contains("services__open");
+  const button = e.target.closest(".services__button");
+  if (!button) return;
+  const card = button.closest(".services__card");
+  const isOpen = card.classList.contains("services__open");
 
+  // Close all cards first, then open the clicked one
   document.querySelectorAll(".services__open").forEach((c) => setServiceOpen(c, false));
-  if (!wasOpen) setServiceOpen(card, true);
+  if (!isOpen) setServiceOpen(card, true);
 });
 
 function setServiceOpen(card, open) {
   const info = card.querySelector(".services__info");
-  info.style.height = info.scrollHeight + "px"; // start from a real pixel height ("auto" can't animate)
-  info.offsetHeight; // force the browser to apply it before changing again
+  info.style.height = info.scrollHeight + "px"; // start from a real height ("auto" can't animate)
+  info.offsetHeight; // apply it before changing again
   card.classList.toggle("services__open", open);
   card.classList.toggle("services__close", !open);
   info.style.height = open ? info.scrollHeight + "px" : "0px";
   card.querySelector(".services__button").setAttribute("aria-expanded", String(open));
 }
 
-// After opening, use height:auto so the chips can re-wrap if the window is resized
+// After opening, switch to height:auto so the skills can re-wrap when the window is resized
 $("#services-container").addEventListener("transitionend", (e) => {
   if (e.propertyName === "height" && e.target.closest(".services__open")) e.target.style.height = "auto";
 });
 
-/*=============== COPY EMAIL ===============*/
+/*=============== COPY EMAIL IN CONTACT ===============*/
 const copyBtn = $("#contact-btn");
 copyBtn.addEventListener("click", async () => {
   const email = $('.contact__address[data-profile="email"]').textContent.trim();
   try {
     await navigator.clipboard.writeText(email);
-    copyBtn.innerHTML = `Email copied ${icon("check-line")}`;
+    copyBtn.innerHTML = `Email Copied ${icon("check-line")}`;
   } catch {
     copyBtn.textContent = email; // clipboard blocked: show the email instead
   }
-  setTimeout(() => (copyBtn.innerHTML = `Copy email ${icon("file-copy-line")}`), 2500);
+  // Restore the original text
+  setTimeout(() => (copyBtn.innerHTML = `Copy Email ${icon("file-copy-line")}`), 2000);
 });
 
-/*=============== FOOTER YEAR ===============*/
+/*=============== CURRENT YEAR OF FOOTER ===============*/
 $("#footer-year").textContent = new Date().getFullYear();
 
-/*=============== ACTIVE LINK ON SCROLL ===============*/
+/*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
 const sections = document.querySelectorAll("section[id]");
-function scrollActive() {
-  const y = window.scrollY;
-  const atBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 2;
+
+const scrollActive = () => {
+  const scrollY = window.scrollY;
+  const atBottom = window.innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
   const linked = [...sections].filter((s) => document.querySelector(`.nav__menu a[href="#${s.id}"]`));
+
   linked.forEach((section, i) => {
-    const link = document.querySelector(`.nav__menu a[href="#${section.id}"]`);
-    const top = section.offsetTop - 80;
-    // the last section is often too short to reach the top of the screen
-    const active = atBottom ? i === linked.length - 1 : y > top && y <= top + section.offsetHeight;
-    link.classList.toggle("active-link", active);
+    const navLink = document.querySelector(`.nav__menu a[href="#${section.id}"]`),
+      top = section.offsetTop - 50,
+      height = section.offsetHeight;
+    // The last section is often too short to reach the top, so at the very bottom it is active
+    const active = atBottom ? i === linked.length - 1 : scrollY > top && scrollY <= top + height;
+    navLink.classList.toggle("active-link", active);
   });
-}
+};
 window.addEventListener("scroll", scrollActive, { passive: true });
 
 /*=============== CUSTOM CURSOR ===============*/
 const cursor = $(".cursor");
-let mouseInside = false, overClickable = false;
-const updateCursor = () => cursor.classList.toggle("hide-cursor", !mouseInside || overClickable);
-document.addEventListener("mousemove", (e) => {
-  cursor.style.left = e.clientX + "px";
-  cursor.style.top = e.clientY + "px";
-  mouseInside = true;
-  updateCursor();
-});
-// Shrink the cursor over clickable things so they stay readable
-document.addEventListener("mouseover", (e) => {
-  overClickable = !!e.target.closest("a, button");
-  updateCursor();
-});
-document.documentElement.addEventListener("mouseleave", () => {
-  mouseInside = false;
-  updateCursor();
-});
+let mouseX = 0,
+  mouseY = 0,
+  mouseMoved = false;
 
-/*=============== SCROLL REVEAL ===============*/
-const revealObserver = new IntersectionObserver(
-  (entries) =>
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("show");
-        revealObserver.unobserve(entry.target);
-      }
-    }),
-  { threshold: 0.12 }
-);
-function setupReveal() {
-  document
-    .querySelectorAll(
-      ".home__data, .home__info, .about__data, .about__image, .section__title, .projects__track, .work__tabs, .work__card, .services__card, .contact__data, .contact__content > *"
-    )
-    .forEach((el) => {
-      if (el.classList.contains("show")) return;
-      el.classList.add("reveal");
-      revealObserver.observe(el);
-    });
+const cursorMove = () => {
+  cursor.style.left = `${mouseX}px`;
+  cursor.style.top = `${mouseY}px`;
+  cursor.style.transform = "translate(-50%, -50%)";
+  requestAnimationFrame(cursorMove);
+};
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  // The cursor stays hidden until the mouse moves (instead of sitting in the corner)
+  if (!mouseMoved) {
+    mouseMoved = true;
+    if (!e.target.closest("a")) cursor.classList.remove("hide-cursor");
+  }
+});
+cursorMove();
+
+// Hide the custom cursor on links (also on links rendered later)
+document.addEventListener("mouseover", (e) => {
+  if (mouseMoved && e.target.closest("a")) cursor.classList.add("hide-cursor");
+});
+document.addEventListener("mouseout", (e) => {
+  const a = e.target.closest("a");
+  if (mouseMoved && a && !a.contains(e.relatedTarget)) cursor.classList.remove("hide-cursor");
+});
+document.documentElement.addEventListener("mouseleave", () => cursor.classList.add("hide-cursor"));
+document.documentElement.addEventListener("mouseenter", () => mouseMoved && cursor.classList.remove("hide-cursor"));
+
+/*=============== SCROLL REVEAL ANIMATION ===============*/
+function startScrollReveal() {
+  if (typeof ScrollReveal === "undefined") return;
+  const sr = ScrollReveal({
+    origin: "top",
+    distance: "60px",
+    duration: 2000,
+    delay: 300,
+    reset: true, // Animation repeat
+  });
+
+  // Home, projects, work, testimonials and contact
+  sr.reveal(`.home__image, .projects__container, .work__container, .testimonials__container, .contact__container`);
+  sr.reveal(`.home__data`, { delay: 900, origin: "bottom" });
+  sr.reveal(`.home__info`, { delay: 1200, origin: "bottom" });
+  sr.reveal(`.home__social, .home__cv`, { delay: 1200 });
+  // About
+  sr.reveal(`.about__data`, { origin: "left" });
+  sr.reveal(`.about__image`, { origin: "right" });
+  // Services (the original passes "intervarl: 100", a typo, so it behaves like this)
+  sr.reveal(`.services__card`);
 }
 
 /*=============== START ===============*/
-renderAll(DEFAULT_DATA);
-scrollActive();
+(async () => {
+  let data;
+  try {
+    // Don't keep the page hidden for long if the network is slow
+    const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 3000));
+    data = (await Promise.race([loadContent(), timeout])) || structuredClone(DEFAULT_DATA);
+  } catch (err) {
+    console.warn("Content not loaded, using data.js:", err.message);
+    data = structuredClone(DEFAULT_DATA);
+  }
 
-// If a Google Sheet is connected, load it and re-render only if something changed.
-loadFromSheet(DEFAULT_DATA)
-  .then((sheetData) => {
-    if (sheetData && JSON.stringify(sheetData) !== JSON.stringify(DEFAULT_DATA)) renderAll(sheetData);
-  })
-  .catch((err) => console.warn("Google Sheet not loaded, using data.js:", err.message));
+  try {
+    const projectCount = renderAll(data);
+    startSplitText();
+    startSwiper(projectCount);
+    startScrollReveal();
+  } finally {
+    document.body.classList.remove("is-loading");
+    scrollActive();
+  }
+})();
