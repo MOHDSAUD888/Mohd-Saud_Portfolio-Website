@@ -60,6 +60,7 @@ assets/vendor/           third-party libraries (see below)
 | Library | Used for | License |
 |---|---|---|
 | [Swiper](https://swiperjs.com) 11.2.10 | projects carousel | MIT |
+| [anime.js](https://animejs.com) 4.1.4 | animated title letters | MIT |
 | [ScrollReveal](https://scrollrevealjs.org) 4.0.9 | scroll animations | GPL-3.0 (free for non-commercial / open-source use) |
 | [SheetJS](https://sheetjs.com) 0.20.3 (mini) | reading the Excel file in the browser | Apache-2.0 |
 | [Remix Icon](https://remixicon.com) 4.6.0 | icons (inline SVG sprite) | Apache-2.0 |

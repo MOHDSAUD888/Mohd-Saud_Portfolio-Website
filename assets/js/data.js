@@ -21,8 +21,8 @@ const DEFAULT_DATA = {
     name_line1: "Mohd",
     name_line2: "Saud",
     hero_split: "Aspiring",
-    // Role under hero_split (the last word goes on the white line). Several roles, separated by commas, take turns.
-    hero_roles: "Cloud/DevOps Engineer",
+    // Animated role under hero_split: the last word goes on the white line
+    hero_role: "Cloud/DevOps Engineer",
     hero_image: "assets/img/hero-profile.webp",
     about_image: "assets/img/about-profile.webp",
     resume: "assets/pdf/Mohd-Saud-Resume.pdf",
