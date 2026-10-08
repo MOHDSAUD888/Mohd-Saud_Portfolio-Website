@@ -562,10 +562,10 @@ document.addEventListener("mouseout", (e) => {
 // The pipeline section pins while it scrolls past, and the scroll position
 // decides which CI stage is "running". Stages use the first 70% of the
 // scroll; the result card holds for the rest, so the finish gets the most room.
-// With "reduce motion" switched on, the section stays a static list.
+// Without JavaScript, the section stays a static list (see styles.css).
 function startPipeline() {
   const pipeline = $("#pipeline");
-  if (!pipeline || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!pipeline) return;
 
   const stages = pipeline.querySelectorAll("[data-stage]");
   const details = pipeline.querySelectorAll("[data-detail]"); // one per stage + the result
