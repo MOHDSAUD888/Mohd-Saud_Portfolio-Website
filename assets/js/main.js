@@ -607,13 +607,17 @@ function startPipeline() {
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 function startScrollReveal() {
-  if (typeof ScrollReveal === "undefined") return;
+  // CHANGED: no animation at all for visitors who asked for reduced motion
+  if (typeof ScrollReveal === "undefined" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  // CHANGED: each section reveals once and quickly. The original (2s + 0.3s delay,
+  // reset: true) hid a section again every time it left the screen, so jumping
+  // there from the menu showed an empty section for up to 2 seconds.
   const sr = ScrollReveal({
     origin: "top",
-    distance: "60px",
-    duration: 2000,
-    delay: 300,
-    reset: true, // Animation repeat
+    distance: "40px",
+    duration: 800,
+    delay: 100,
+    reset: false,
   });
 
   // Home, projects, work, testimonials and contact
