@@ -402,7 +402,6 @@ function startRoles(p) {
   window.addEventListener("resize", fit);
   fit();
   box.classList.add("is-in");
-  if (roles.length < 2) return;
 
   const HOLD = 3200, EXIT = 700;
   setInterval(() => {
