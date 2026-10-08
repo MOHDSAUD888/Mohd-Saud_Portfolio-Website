@@ -618,15 +618,18 @@ function startPipeline() {
 function startScrollReveal() {
   // CHANGED: no animation at all for visitors who asked for reduced motion
   if (typeof ScrollReveal === "undefined" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  // CHANGED: each section reveals once and quickly. The original (2s + 0.3s delay,
-  // reset: true) hid a section again every time it left the screen, so jumping
-  // there from the menu showed an empty section for up to 2 seconds.
+  // CHANGED: the animation replays every time a section scrolls into view
+  // (reset: true), but it is short (0.8s instead of 2s) so a jump from the menu
+  // never lands on an empty section for long. The long hero delays only run on
+  // the first page load (useDelay: "onload"), not every time you scroll back up.
+  // refreshReveal() keeps the measured positions correct when the page height changes.
   const sr = ScrollReveal({
     origin: "top",
     distance: "40px",
     duration: 800,
     delay: 100,
-    reset: false,
+    reset: true,
+    useDelay: "onload",
   });
 
   // Home, projects, work, testimonials and contact
