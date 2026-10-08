@@ -1484,9 +1484,10 @@ body.is-loading .footer {
   visibility: hidden;
 }
 
-/* Menu links on phones/tablets: keep the section title below the fixed header */
+/* Menu links on phones/tablets: keep the section title below the fixed header
+   (4 stacked links make the header about 8.25rem tall) */
 html {
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 7.25rem;
 }
 
 /* Project status badge (In progress / Completed) */
