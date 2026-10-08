@@ -36,6 +36,10 @@ const splitList = (s) => String(s ?? "").split(/[,;\n]/).map((x) => x.trim()).fi
 const isVisible = (row) => String(row.visible ?? "yes").trim().toLowerCase() !== "no";
 const pad = (n) => String(n).padStart(2, "0");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+// Screens >= 2048px use "body { zoom: 1.4 }": mouse and scroll positions are zoomed, element offsets are not
+const bodyZoom = () => parseFloat(getComputedStyle(document.body).zoom) || 1;
+let zoom = bodyZoom();
+window.addEventListener("resize", () => (zoom = bodyZoom()));
 
 /*=============== CONTENT LOADING ===============*/
 const TABS = ["Profile", "Projects", "Experience", "Services", "Testimonials"];
@@ -150,7 +154,9 @@ function mergeTabs(defaults, tabs) {
 async function loadContent() {
   const sources = [];
   if (typeof SHEET_URL === "string" && SHEET_URL.trim()) sources.push(["Google Sheet", () => loadGoogleTabs(SHEET_URL)]);
-  if (typeof EXCEL_FILE === "string" && EXCEL_FILE.trim()) sources.push(["Excel file", () => loadExcelTabs(EXCEL_FILE)]);
+  // Still read the Excel file if data.js is broken (EXCEL_FILE missing)
+  const excel = typeof EXCEL_FILE === "string" ? EXCEL_FILE : "portfolio-data.xlsx";
+  if (excel.trim()) sources.push(["Excel file", () => loadExcelTabs(excel)]);
 
   for (const [name, load] of sources) {
     try {
@@ -188,6 +194,12 @@ function renderProfile(p) {
     if (value) el.textContent = value;
   });
   $("#about-text").innerHTML = boldify(p.about_text);
+  if (p.page_title) document.title = p.page_title;
+  if (p.page_description) document.querySelector('meta[name="description"]').setAttribute("content", p.page_description);
+  if (p.logo) {
+    $("#hero-image").alt = p.logo;
+    $("#about-image").alt = p.logo;
+  }
 
   const heroImage = safeUrl(p.hero_image);
   if (heroImage) $("#hero-image").src = heroImage;
@@ -246,6 +258,8 @@ function projectCard(p, i) {
 // Returns the number of real (not repeated) projects
 function renderProjects(projects) {
   const cards = projects.filter(isVisible).map(projectCard);
+  $("#projects").hidden = cards.length === 0;
+  document.querySelector('.nav__menu a[href="#projects"]').closest("li").hidden = cards.length === 0;
   // Swiper's loop mode needs more slides than fit on the screen, so with only
   // a few projects the cards are repeated (the original design had 8 projects).
   const copies = cards.length ? Math.ceil(8 / cards.length) : 0;
@@ -368,8 +382,10 @@ function startSplitText() {
     delay: stagger(80),
     loop: true,
   };
-  animate(chars1, options);
-  animate(chars2, options);
+  // Lines with fewer letters wait a bit longer, so both loops stay in sync
+  const longest = Math.max(chars1.length, chars2.length);
+  animate(chars1, { ...options, loopDelay: (longest - chars1.length) * 80 });
+  animate(chars2, { ...options, loopDelay: (longest - chars2.length) * 80 });
 }
 
 /*=============== SWIPER PROJECTS ===============*/
@@ -387,7 +403,11 @@ function startSwiper(count) {
   // One bullet per real project (the repeated cards share the same bullets)
   const bullets = document.querySelectorAll("#projects-pagination .swiper-pagination-bullet");
   const update = () =>
-    bullets.forEach((b, i) => b.classList.toggle("swiper-pagination-bullet-active", i === swiperProjects.realIndex % count));
+    bullets.forEach((b, i) => {
+      const active = i === swiperProjects.realIndex % count;
+      b.classList.toggle("swiper-pagination-bullet-active", active);
+      active ? b.setAttribute("aria-current", "true") : b.removeAttribute("aria-current");
+    });
   const goTo = (i) => {
     const current = swiperProjects.realIndex;
     swiperProjects.slideToLoop(current - (current % count) + i);
@@ -413,6 +433,7 @@ tabs.forEach((tab) => {
     // Activate the tab and its content
     tab.classList.add("work-active");
     targetContent.classList.add("work-active");
+    tabs.forEach((t) => t.setAttribute("aria-pressed", String(t === tab)));
   });
 });
 
@@ -466,13 +487,15 @@ const sections = document.querySelectorAll("section[id]");
 
 const scrollActive = () => {
   const scrollY = window.scrollY;
+  // Menu clicks stop "scroll-padding-top" above a section, so the threshold must be larger than that
+  const offset = Math.max(50, (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0) + 2);
   const atBottom = window.innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
   const linked = [...sections].filter((s) => document.querySelector(`.nav__menu a[href="#${s.id}"]`));
 
   linked.forEach((section, i) => {
     const navLink = document.querySelector(`.nav__menu a[href="#${section.id}"]`),
-      top = section.offsetTop - 50,
-      height = section.offsetHeight;
+      top = (section.offsetTop - offset) * zoom,
+      height = section.offsetHeight * zoom;
     // The last section is often too short to reach the top, so at the very bottom it is active
     const active = atBottom ? i === linked.length - 1 : scrollY > top && scrollY <= top + height;
     navLink.classList.toggle("active-link", active);
@@ -487,8 +510,8 @@ let mouseX = 0,
   mouseMoved = false;
 
 const cursorMove = () => {
-  cursor.style.left = `${mouseX}px`;
-  cursor.style.top = `${mouseY}px`;
+  cursor.style.left = `${mouseX / zoom}px`;
+  cursor.style.top = `${mouseY / zoom}px`;
   cursor.style.transform = "translate(-50%, -50%)";
   requestAnimationFrame(cursorMove);
 };
@@ -511,8 +534,6 @@ document.addEventListener("mouseout", (e) => {
   const a = e.target.closest("a");
   if (mouseMoved && a && !a.contains(e.relatedTarget)) cursor.classList.remove("hide-cursor");
 });
-document.documentElement.addEventListener("mouseleave", () => cursor.classList.add("hide-cursor"));
-document.documentElement.addEventListener("mouseenter", () => mouseMoved && cursor.classList.remove("hide-cursor"));
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 function startScrollReveal() {
@@ -538,22 +559,30 @@ function startScrollReveal() {
 }
 
 /*=============== START ===============*/
-(async () => {
-  let data;
-  try {
-    // Don't keep the page hidden for long if the network is slow
-    const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 3000));
-    data = (await Promise.race([loadContent(), timeout])) || structuredClone(DEFAULT_DATA);
-  } catch (err) {
-    console.warn("Content not loaded, using data.js:", err.message);
-    data = structuredClone(DEFAULT_DATA);
-  }
+// If data.js has a typo, DEFAULT_DATA does not exist: use empty content instead of a blank page
+if (typeof DEFAULT_DATA === "undefined") {
+  console.error("assets/js/data.js could not be read (check it for a missing comma or quote)");
+  window.DEFAULT_DATA = { profile: {}, projects: [], experience: [], services: [], testimonials: [] };
+}
 
+(async () => {
   try {
+    let data;
+    try {
+      // Don't keep the page hidden for long if the network is slow
+      const timeout = new Promise((resolve) => setTimeout(() => resolve(null), 3000));
+      data = (await Promise.race([loadContent(), timeout])) || structuredClone(DEFAULT_DATA);
+    } catch (err) {
+      console.warn("Content not loaded, using data.js:", err.message);
+      data = structuredClone(DEFAULT_DATA);
+    }
+
     const projectCount = renderAll(data);
     startSplitText();
     startSwiper(projectCount);
     startScrollReveal();
+  } catch (err) {
+    console.error(err);
   } finally {
     document.body.classList.remove("is-loading");
     scrollActive();

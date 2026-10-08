@@ -15,6 +15,8 @@ const DEFAULT_DATA = {
   /* ---------- Profile: one value per key ---------- */
   profile: {
     logo: "Mohd Saud",
+    page_title: "Mohd Saud | Cloud & DevOps Engineer",
+    page_description: "Portfolio of Mohd Saud: Cloud & DevOps engineer in the making, working with AWS, Terraform, Docker, CI/CD and Cloud Security.",
     greeting: "Hello, I'm",
     name_line1: "Mohd",
     name_line2: "Saud",
@@ -106,7 +108,7 @@ const DEFAULT_DATA = {
       type: "Education",
       title: "B.Tech\n(Computer Science)",
       organization: "Dr. A.P.J. Abdul Kalam Technical University (AKTU), Lucknow",
-      period: "Graduated\n2026",
+      period: "Class of\n2026",
       description:
         "Studied computer science fundamentals, programming, networking and problem solving, and moved into Cloud and DevOps through hands-on projects.",
       visible: "yes",

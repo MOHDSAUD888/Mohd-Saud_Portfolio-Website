@@ -1506,7 +1506,7 @@ html {
 
 /* Shown instead of a screenshot until a project image is added */
 .projects__placeholder {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 1897 / 871; /* same shape as the original project screenshots */
   border-radius: 1.5rem;
   background: radial-gradient(circle at 30% 20%, hsla(var(--hue), 60%, 64%, 0.35), transparent 60%),
     var(--body-color);
@@ -1523,11 +1523,57 @@ html {
   color: var(--first-color-light);
 }
 
-/* Touch screens have no hover, so always show the project link button */
-@media (hover: none) {
-  .projects__button {
-    opacity: 1;
-    pointer-events: initial;
+/* Keyboard users: show the project link button when it has focus */
+.projects__image:focus-within .projects__button,
+.projects__button:focus-visible {
+  opacity: 1;
+  pointer-events: initial;
+}
+
+/* Visible keyboard focus (the base "button { outline: none }" removes it) */
+.work__button:focus-visible,
+.services__button:focus-visible,
+.swiper-pagination-bullet:focus-visible {
+  outline: 2px solid var(--first-color);
+  outline-offset: 3px;
+}
+
+/* Long words from the spreadsheet never spill out of a card */
+.projects__title,
+.projects__description,
+.work__title,
+.work__subtitle,
+.services__title {
+  overflow-wrap: anywhere;
+}
+
+/* Work cards: title and year never touch */
+.work__data {
+  column-gap: 0.5rem;
+}
+
+/* The About shadow is decoration only: never block the Resume button */
+.about__shadow {
+  pointer-events: none;
+}
+.about__data {
+  position: relative;
+  z-index: 2;
+}
+
+/* Animated hero lines stay on one line; shrink on small screens if the text is long */
+.home__profession-1,
+.home__profession-2 {
+  white-space: nowrap;
+}
+@media screen and (max-width: 1149px) {
+  .home__profession-1,
+  .home__profession-2 {
+    font-size: min(var(--bigger-font-size), 8.75vw);
+  }
+  /* Open services card: keep the arrow button off the last row of skills */
+  .services__open .services__info {
+    padding-bottom: 1rem;
   }
 }
 
