@@ -8,7 +8,7 @@
    So normally you only edit portfolio-data.xlsx and upload it to GitHub.
    ===================================================================== */
 
-const SHEET_URL = ""; // optional, e.g. "https://docs.google.com/spreadsheets/d/XXXXXXXX/edit"
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1bBiYR2WD2ED9n-IzB0Z5gI__eTXi_dmKNkZ4TqwxvN8/edit"; // optional, e.g. "https://docs.google.com/spreadsheets/d/XXXXXXXX/edit"
 const EXCEL_FILE = "portfolio-data.xlsx";
 
 const DEFAULT_DATA = {
