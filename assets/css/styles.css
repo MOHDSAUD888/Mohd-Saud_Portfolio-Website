@@ -1664,7 +1664,7 @@ html {
 }
 
 /*=============== PIPELINE ON SCROLL (ADDED) ===============*/
-/* Base = static list (no JavaScript, or "reduce motion" switched on).
+/* Base = static list (no JavaScript).
    main.js adds .pipeline--live: the section pins and replays one stage at a time. */
 .pipeline__head .section__title {
   text-align: initial;
@@ -1995,11 +1995,5 @@ html {
   .pipeline__track::before,
   .pipeline__track::after {
     top: 1.5rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pipeline__stage.is-running .pipeline__node::after {
-    animation: none;
   }
 }
