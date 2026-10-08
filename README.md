@@ -14,12 +14,12 @@
 
 <!-- Badges -->
 <div align="center">
-  <a href="https://github.com/YOUR_GITHUB_USERNAME?tab=followers">
-    <img src="https://img.shields.io/github/followers/YOUR_GITHUB_USERNAME?style=for-the-badge&color=ff9900&labelColor=0d1117&label=Followers&logo=github" alt="Followers"/>
+  <a href="https://github.com/MOHDSAUD888?tab=followers">
+    <img src="https://img.shields.io/github/followers/MOHDSAUD888?style=for-the-badge&color=ff9900&labelColor=0d1117&label=Followers&logo=github" alt="Followers"/>
   </a>
   &nbsp;
-  <a href="https://github.com/YOUR_GITHUB_USERNAME?tab=stars">
-    <img src="https://img.shields.io/github/stars/YOUR_GITHUB_USERNAME?style=for-the-badge&color=ff9900&labelColor=0d1117&label=Stars&logo=github" alt="Stars"/>
+  <a href="https://github.com/MOHDSAUD888?tab=stars">
+    <img src="https://img.shields.io/github/stars/MOHDSAUD888?style=for-the-badge&color=ff9900&labelColor=0d1117&label=Stars&logo=github" alt="Stars"/>
   </a>
 </div>
 
@@ -98,7 +98,7 @@ A Flask web app wrapped in a **DevSecOps CI/CD pipeline**, built to practice how
 
 **What it demonstrates:** automated build → scan → deploy flow, infrastructure defined as code, and keyless authentication between GitHub and AWS.
 
-> 🔗 Repo: `https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME`
+> 🔗 Repo: [MOHDSAUD888/Secure-cloud-devsecops](https://github.com/MOHDSAUD888/Secure-cloud-devsecops)
 
 ---
 
@@ -120,12 +120,12 @@ A Flask web app wrapped in a **DevSecOps CI/CD pipeline**, built to practice how
 ## 📊 GitHub Stats
 
 <div align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB_USERNAME&show_icons=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=ff9900&icon_color=ff9900&text_color=ffd28a" alt="GitHub Stats"/>
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_GITHUB_USERNAME&layout=compact&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=ff9900&text_color=ffd28a" alt="Top Languages"/>
+  <img height="170" src="https://github-readme-stats.vercel.app/api?username=MOHDSAUD888&show_icons=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=ff9900&icon_color=ff9900&text_color=ffd28a" alt="GitHub Stats"/>
+  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MOHDSAUD888&layout=compact&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=ff9900&text_color=ffd28a" alt="Top Languages"/>
 </div>
 
 <div align="center">
-  <img src="https://streak-stats.demolab.com/?user=YOUR_GITHUB_USERNAME&theme=github-dark-blue&hide_border=true&background=0d1117&ring=ff9900&fire=ff9900&currStreakLabel=ff9900&sideLabels=ffd28a&dates=8b949e&stroke=21262d" alt="Streak Stats"/>
+  <img src="https://streak-stats.demolab.com/?user=MOHDSAUD888&theme=github-dark-blue&hide_border=true&background=0d1117&ring=ff9900&fire=ff9900&currStreakLabel=ff9900&sideLabels=ffd28a&dates=8b949e&stroke=21262d" alt="Streak Stats"/>
 </div>
 
 ---
@@ -133,15 +133,15 @@ A Flask web app wrapped in a **DevSecOps CI/CD pipeline**, built to practice how
 ## 🤝 Connect With Me
 
 <div align="center">
-  <a href="https://www.linkedin.com/in/YOUR_LINKEDIN_ID/" target="_blank">
+  <a href="https://www.linkedin.com/in/mohdsaud1/" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
   </a>
   &nbsp;
-  <a href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank">
+  <a href="https://github.com/MOHDSAUD888" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
   </a>
   &nbsp;
-  <a href="mailto:YOUR_EMAIL@example.com">
+  <a href="mailto:mosaud1997@icloud.com">
     <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
   </a>
 </div>
