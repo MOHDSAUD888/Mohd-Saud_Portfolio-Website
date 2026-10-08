@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="assets/vendor/swiper-bundle.min.css?v=7" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=7" />
+    <link rel="stylesheet" href="assets/css/styles.css?v=8" />
   </head>
 
   <body>
@@ -160,6 +160,105 @@
         </div>
       </section>
 
+      <!-- PIPELINE (ADDED): a scroll-driven replay of the real SecureOps CI workflow.
+           Without JavaScript, or with "reduce motion" switched on, every stage is shown as a static list. -->
+      <section class="pipeline section" id="pipeline" aria-labelledby="pipeline-title">
+        <div class="pipeline__frame">
+          <div class="pipeline__container container">
+            <div class="pipeline__head">
+              <h2 class="section__title" id="pipeline-title">
+                <span class="plain">One Push,</span> <br />
+                <span>Five Stages</span>
+              </h2>
+              <p class="pipeline__lead">
+                The CI workflow of my SecureOps project, replayed stage by stage. Each stage links to the code that runs it.
+              </p>
+            </div>
+
+            <ol class="pipeline__track" aria-label="SecureOps CI stages">
+              <li class="pipeline__stage" data-stage>
+                <span class="pipeline__node"><span class="pipeline__num">1</span><svg class="icon" aria-hidden="true"><use href="#ri-check-line"></use></svg></span>
+                <span class="pipeline__label">Push</span>
+              </li>
+              <li class="pipeline__stage" data-stage>
+                <span class="pipeline__node"><span class="pipeline__num">2</span><svg class="icon" aria-hidden="true"><use href="#ri-check-line"></use></svg></span>
+                <span class="pipeline__label">Install</span>
+              </li>
+              <li class="pipeline__stage" data-stage>
+                <span class="pipeline__node"><span class="pipeline__num">3</span><svg class="icon" aria-hidden="true"><use href="#ri-check-line"></use></svg></span>
+                <span class="pipeline__label">Test</span>
+              </li>
+              <li class="pipeline__stage" data-stage>
+                <span class="pipeline__node"><span class="pipeline__num">4</span><svg class="icon" aria-hidden="true"><use href="#ri-check-line"></use></svg></span>
+                <span class="pipeline__label">Build</span>
+              </li>
+              <li class="pipeline__stage" data-stage>
+                <span class="pipeline__node"><span class="pipeline__num">5</span><svg class="icon" aria-hidden="true"><use href="#ri-check-line"></use></svg></span>
+                <span class="pipeline__label">Scan</span>
+              </li>
+            </ol>
+
+            <div class="pipeline__panel">
+              <article class="pipeline__detail" data-detail>
+                <p class="pipeline__step">on: push</p>
+                <h3 class="pipeline__title">A push starts the run</h3>
+                <p>Every push to the repository triggers the <b>SecureOps CI</b> workflow on GitHub Actions. Nobody has to start it by hand.</p>
+                <p class="pipeline__why"><b>Why:</b> checks that run on every change catch problems while the change is still small.</p>
+                <a href="https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.github/workflows/ci-cd.yml" target="_blank" rel="noopener" class="pipeline__link">ci-cd.yml <svg class="icon" aria-hidden="true"><use href="#ri-arrow-right-up-long-line"></use></svg></a>
+              </article>
+
+              <article class="pipeline__detail" data-detail>
+                <p class="pipeline__step">setup-python 3.12</p>
+                <h3 class="pipeline__title">Install pinned dependencies</h3>
+                <p>The runner sets up <b>Python 3.12</b> and installs the exact versions pinned in <code>requirements.txt</code>.</p>
+                <p class="pipeline__why"><b>Why:</b> pinned versions mean today's build and next month's build use the same code.</p>
+                <a href="https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/app/requirements.txt" target="_blank" rel="noopener" class="pipeline__link">requirements.txt <svg class="icon" aria-hidden="true"><use href="#ri-arrow-right-up-long-line"></use></svg></a>
+              </article>
+
+              <article class="pipeline__detail" data-detail>
+                <p class="pipeline__step">python -m unittest</p>
+                <h3 class="pipeline__title">Run the unit tests</h3>
+                <p>A <b>unittest</b> check confirms that the Flask app answers <code>GET /</code> with status 200.</p>
+                <p class="pipeline__why"><b>Why:</b> if the app can't serve its home page, there is no point building an image of it.</p>
+                <a href="https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/app/test_app.py" target="_blank" rel="noopener" class="pipeline__link">test_app.py <svg class="icon" aria-hidden="true"><use href="#ri-arrow-right-up-long-line"></use></svg></a>
+              </article>
+
+              <article class="pipeline__detail" data-detail>
+                <p class="pipeline__step">docker build</p>
+                <h3 class="pipeline__title">Build the Docker image</h3>
+                <p>The image uses <b>python:3.12-slim</b> and runs Gunicorn on port 5000. It is tagged with the <b>commit SHA</b>.</p>
+                <p class="pipeline__why"><b>Why:</b> a SHA tag maps every image to exactly one commit, so a scan result can be traced back to its code. A shared <code>latest</code> tag can't do that.</p>
+                <a href="https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/docker/Dockerfile" target="_blank" rel="noopener" class="pipeline__link">Dockerfile <svg class="icon" aria-hidden="true"><use href="#ri-arrow-right-up-long-line"></use></svg></a>
+              </article>
+
+              <article class="pipeline__detail" data-detail>
+                <p class="pipeline__step">trivy image</p>
+                <h3 class="pipeline__title">Scan for vulnerabilities</h3>
+                <p><b>Trivy</b> scans the image for HIGH and CRITICAL vulnerabilities and skips the ones with no fix available yet.</p>
+                <p class="pipeline__why"><b>Honest status:</b> today it reports findings in the job log but does not fail the build. Making it a hard gate is my next step.</p>
+                <a href="https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.github/workflows/ci-cd.yml" target="_blank" rel="noopener" class="pipeline__link">ci-cd.yml <svg class="icon" aria-hidden="true"><use href="#ri-arrow-right-up-long-line"></use></svg></a>
+              </article>
+
+              <article class="pipeline__detail pipeline__result" data-detail>
+                <p class="pipeline__step">result</p>
+                <h3 class="pipeline__title">Tested, built and scanned</h3>
+                <p>That is what runs today on every push. The AWS half is what I'm building now:</p>
+                <ul class="pipeline__next" aria-label="Planned next">
+                  <li>Fail on HIGH / CRITICAL</li>
+                  <li>GitHub OIDC to AWS</li>
+                  <li>Push to Amazon ECR</li>
+                  <li>Terraform: VPC + EC2</li>
+                  <li>CloudWatch alarms</li>
+                </ul>
+                <a href="https://github.com/MOHDSAUD888/Secure-cloud-devsecops/actions/workflows/ci-cd.yml" target="_blank" rel="noopener" class="pipeline__badge">
+                  <img src="https://img.shields.io/github/actions/workflow/status/MOHDSAUD888/Secure-cloud-devsecops/ci-cd.yml?branch=main&amp;label=SecureOps%20CI&amp;style=flat-square" alt="Live status of the SecureOps CI workflow on GitHub" height="20" loading="lazy" />
+                </a>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- WORK -->
       <section class="work section">
         <h2 class="section__title">
@@ -285,6 +384,6 @@
 
     <!-- CONTENT + MAIN JS -->
     <script src="assets/js/data.js?v=7"></script>
-    <script src="assets/js/main.js?v=7"></script>
+    <script src="assets/js/main.js?v=10"></script>
   </body>
 </html>

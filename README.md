@@ -19,7 +19,7 @@
 [![SecureOps CI workflow status][b-ci]](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/actions/workflows/ci-cd.yml)
 
 **[Featured: SecureOps Dashboard](#-secureops-dashboard-a-devsecops-pipeline)** &nbsp;·&nbsp;
-**[Live portfolio](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)** &nbsp;·&nbsp;
+**[Live portfolio](https://mohdsaud888.github.io/Personal_Portfolio/)** &nbsp;·&nbsp;
 **[LinkedIn](https://www.linkedin.com/in/mohdsaud1/)** &nbsp;·&nbsp;
 **[Email](mailto:mosaud1997@icloud.com)**
 
@@ -167,12 +167,13 @@ trivy image --severity HIGH,CRITICAL --ignore-unfixed secureops:local
 ### 🌐 Portfolio Website: this repository
 
 [![Status: completed][b-done]](#-portfolio-website-this-repository)
-[![Open live site][b-live]](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)
+[![Open live site][b-live]](https://mohdsaud888.github.io/Personal_Portfolio/)
 
 My personal portfolio, built with **plain HTML, CSS and JavaScript**: no framework and no build step. The design is based on [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/) (same layout, colours, fonts and animations), with my own content and photos.
 
 - **Excel as a CMS:** profile, projects, experience, skills and testimonials live in [`portfolio-data.xlsx`](portfolio-data.xlsx). Edit it in Excel, upload it to GitHub, and the site updates, no code needed. A Google Sheet can be connected instead via `SHEET_URL`. If neither can be read, the site falls back to the defaults in [`data.js`](assets/js/data.js).
 - **Spreadsheet content treated as untrusted:** every value is HTML-escaped, and links are limited to `http(s)`, `mailto` or relative paths before rendering.
+- **Pipeline on scroll:** a section that replays the real SecureOps CI workflow (push, install, test, build, Trivy scan) one stage at a time as you scroll, with a link to the code behind each stage and a live CI status badge. With "reduce motion" switched on, it shows as a static list.
 - **No external CDN:** fonts (Montserrat, Unbounded), libraries (Swiper, anime.js, ScrollReveal, SheetJS) and icons (Remix Icon, as an inline SVG sprite) are all served from this repository.
 
 <details>
@@ -262,7 +263,7 @@ I'm open to **entry-level Cloud / DevOps roles and internships**. If you're hiri
 
 [![LinkedIn][b-linkedin]](https://www.linkedin.com/in/mohdsaud1/)
 [![Email][b-email]](mailto:mosaud1997@icloud.com)
-[![Live portfolio][b-portfolio]](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)
+[![Live portfolio][b-portfolio]](https://mohdsaud888.github.io/Personal_Portfolio/)
 [![GitHub][b-github]](https://github.com/MOHDSAUD888)
 
 </div>
@@ -298,8 +299,8 @@ assets/vendor/          third-party libraries (see Credits)
 No install needed. Any static file server works:
 
 ```bash
-git clone https://github.com/MOHDSAUD888/Mohd-Saud_Portfolio-Website.git
-cd Mohd-Saud_Portfolio-Website
+git clone https://github.com/MOHDSAUD888/Personal_Portfolio.git
+cd Personal_Portfolio
 python3 -m http.server 8000
 # open http://localhost:8000
 ```
@@ -312,7 +313,7 @@ python3 -m http.server 8000
 
 1. Open the repo **Settings → Pages**.
 2. Source: **Deploy from a branch** → branch **`main`**, folder **`/ (root)`** → **Save**.
-3. After a minute or two the site is live at `https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/`.
+3. After a minute or two the site is live at `https://mohdsaud888.github.io/Personal_Portfolio/`.
 
 </details>
 

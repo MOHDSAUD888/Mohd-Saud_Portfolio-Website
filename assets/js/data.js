@@ -88,7 +88,7 @@ const DEFAULT_DATA = {
       stack: "HTML, CSS, JavaScript, Swiper JS, Anime JS, GitHub Pages",
       status: "Completed",
       image: "",
-      link: "https://github.com/MOHDSAUD888/Mohd-Saud_Portfolio-Website",
+      link: "https://github.com/MOHDSAUD888/Personal_Portfolio",
       visible: "yes",
     },
   ],
