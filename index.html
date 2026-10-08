@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mohd Saud | Aspiring Cloud &amp; DevOps Engineer</title>
+  <meta name="description" content="Portfolio of Mohd Saud, a B.Tech Computer Science student building hands-on Cloud, DevOps and Cloud Security skills." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="nav">
+    <a href="#home" class="logo">Mohd<span>.Saud</span></a>
+    <nav>
+      <ul id="menu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" aria-label="Toggle dark and light theme">🌓</button>
+      <button id="menu-toggle" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <p class="eyebrow">Hi, I'm Mohd Saud 👋</p>
+      <h1>Building my path into <span class="grad">Cloud &amp; DevOps</span></h1>
+      <p class="typing">I am learning <span id="typed"></span><span class="cursor">|</span></p>
+      <p class="lead">
+        Final-year B.Tech Computer Science student with real-world automobile industry experience,
+        now building hands-on skills in Linux, AWS, CI/CD and Cloud Security.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="#projects">View Projects</a>
+        <a class="btn" href="resume.pdf" download>Download Resume</a>
+        <a class="btn ghost" href="#contact">Contact Me</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About Me</h2>
+      <div class="two-col">
+        <p>
+          I started my career in the automobile industry, where I worked in a real corporate environment
+          (including OneUp Motors) handling customers, coordination and daily operations under pressure.
+          That taught me responsibility, communication and problem-solving.
+        </p>
+        <p>
+          Now I am combining that experience with my B.Tech in Computer Science to move into technology.
+          My focus is <strong>Cloud and DevOps</strong>, with <strong>Cloud Security</strong> as my longer-term direction.
+          I learn by building, breaking things, and documenting what I fix.
+        </p>
+      </div>
+      <ul class="path">
+        <li>Automobile Operations</li><li>B.Tech CSE</li><li>Technical Upskilling</li><li>Cloud / DevOps</li><li>Cloud Security</li>
+      </ul>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <h2>Skills</h2>
+      <p class="sub">Honest levels: this shows what I am learning, not what I pretend to know.</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Cloud</h3>
+          <ul class="tags"><li>AWS (EC2, S3, IAM, VPC)</li></ul>
+          <span class="level learning">Learning</span>
+        </article>
+        <article class="card">
+          <h3>DevOps</h3>
+          <ul class="tags"><li>Git &amp; GitHub</li><li>Linux</li><li>CI/CD</li><li>Docker</li></ul>
+          <span class="level learning">Learning</span>
+        </article>
+        <article class="card">
+          <h3>Programming</h3>
+          <ul class="tags"><li>Python</li><li>DSA</li><li>HTML/CSS/JS</li></ul>
+          <span class="level learning">Building fundamentals</span>
+        </article>
+        <article class="card">
+          <h3>Professional</h3>
+          <ul class="tags"><li>Communication</li><li>Customer handling</li><li>Coordination</li><li>Working under pressure</li></ul>
+          <span class="level strong">From industry experience</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <p class="sub">Each project explains the problem, what I built, and what I learned.</p>
+      <div class="grid" id="project-grid">
+        <!-- Rendered by script.js from the projects array -->
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section id="journey">
+      <h2>My Journey</h2>
+      <ol class="timeline">
+        <li>
+          <h3>Automobile Industry Professional</h3>
+          <p class="meta">OneUp Motors · Operations</p>
+          <p>Customer handling, coordination and daily operations in a fast-paced environment.</p>
+        </li>
+        <li>
+          <h3>B.Tech in Computer Science</h3>
+          <p class="meta">Final year</p>
+          <p>Core CS fundamentals, programming and problem solving.</p>
+        </li>
+        <li>
+          <h3>Cloud &amp; DevOps Upskilling</h3>
+          <p class="meta">Present</p>
+          <p>Linux, AWS, Git, CI/CD and hands-on projects documented on GitHub.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Let's Connect</h2>
+      <p class="sub">Open to internships and entry-level Cloud / DevOps opportunities.</p>
+      <div class="cta">
+        <button class="btn primary" id="copy-email" data-email="mosaud1997@icloud.com">Copy Email</button>
+        <a class="btn" href="https://github.com/mohdsaud888" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <p id="copy-msg" class="meta" role="status"></p>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> Mohd Saud. Built with plain HTML, CSS and JavaScript.</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
