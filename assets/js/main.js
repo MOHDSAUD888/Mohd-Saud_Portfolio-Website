@@ -616,18 +616,22 @@ function startPipeline() {
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 function startScrollReveal() {
-  // CHANGED: no animation at all for visitors who asked for reduced motion
-  if (typeof ScrollReveal === "undefined" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (typeof ScrollReveal === "undefined") return;
+  // CHANGED: visitors who switched off animations in their system settings
+  // ("reduce motion") still get the slow fade, but without the sliding
+  // movement (distance 0), because movement is what causes discomfort.
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   // CHANGED: the animation replays every time a section scrolls into view
-  // (reset: true), but it is short (0.8s instead of 2s) so a jump from the menu
-  // never lands on an empty section for long. The long hero delays only run on
-  // the first page load (useDelay: "onload"), not every time you scroll back up.
+  // (reset: true). 1.4s is slow enough to see the details appear, but shorter
+  // than the original 2s, so a jump from the menu does not land on an empty
+  // section for long. The long hero delays only run on the first page load
+  // (useDelay: "onload"), not every time you scroll back up.
   // refreshReveal() keeps the measured positions correct when the page height changes.
   const sr = ScrollReveal({
     origin: "top",
-    distance: "40px",
-    duration: 800,
-    delay: 100,
+    distance: reduceMotion ? "0px" : "60px",
+    duration: 1400,
+    delay: 200,
     reset: true,
     useDelay: "onload",
   });
