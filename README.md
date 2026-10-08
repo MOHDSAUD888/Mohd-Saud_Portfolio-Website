@@ -169,11 +169,11 @@ trivy image --severity HIGH,CRITICAL --ignore-unfixed secureops:local
 [![Status: completed][b-done]](#-portfolio-website-this-repository)
 [![Open live site][b-live]](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)
 
-My personal portfolio, built with **plain HTML, CSS and JavaScript**: no framework and no build step. Layout inspired by [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/).
+My personal portfolio, built with **plain HTML, CSS and JavaScript**: no framework and no build step. The design is based on [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/) (same layout, colours, fonts and animations), with my own content and photos.
 
-- **Google Sheet as a CMS:** profile, projects, experience, skills and testimonials can be edited from a Google Sheet (connect one via `SHEET_URL`), no code needed. If the sheet can't be loaded, the site falls back to the defaults in [`data.js`](assets/js/data.js).
-- **Sheet content treated as untrusted:** every value is HTML-escaped, and links are limited to `http(s)`, `mailto` or relative paths before rendering.
-- **No external CDN:** fonts (Montserrat, Unbounded) are self-hosted and icons (Remix Icon) are an inline SVG sprite, so it works offline.
+- **Excel as a CMS:** profile, projects, experience, skills and testimonials live in [`portfolio-data.xlsx`](portfolio-data.xlsx). Edit it in Excel, upload it to GitHub, and the site updates, no code needed. A Google Sheet can be connected instead via `SHEET_URL`. If neither can be read, the site falls back to the defaults in [`data.js`](assets/js/data.js).
+- **Spreadsheet content treated as untrusted:** every value is HTML-escaped, and links are limited to `http(s)`, `mailto` or relative paths before rendering.
+- **No external CDN:** fonts (Montserrat, Unbounded), libraries (Swiper, anime.js, ScrollReveal, SheetJS) and icons (Remix Icon, as an inline SVG sprite) are all served from this repository.
 
 <details>
 <summary><b>⚙️ Under the hood: how the content loads</b></summary>
@@ -181,8 +181,8 @@ My personal portfolio, built with **plain HTML, CSS and JavaScript**: no framewo
 
 | How it works | Why it matters |
 | :-- | :-- |
-| **Defaults first, sheet second** | [`main.js`](assets/js/main.js) renders the content in [`data.js`](assets/js/data.js) immediately, then loads the sheet (if one is connected) and re-renders only if the data actually changed. No blank page while waiting on Google. |
-| **Per-tab fallback** | The five tabs load in parallel with `Promise.allSettled`. A tab that fails, or is missing its required columns, is skipped and keeps its defaults. The column check matters because Google returns the *first* tab when a tab name is wrong. |
+| **Spreadsheet first, defaults as backup** | [`main.js`](assets/js/main.js) reads `portfolio-data.xlsx` (or the Google Sheet, if `SHEET_URL` is set) with a 3-second timeout. If that fails, it renders the content in [`data.js`](assets/js/data.js), so the page never stays blank. |
+| **Per-tab fallback** | Each tab is checked for its required columns. A tab that is missing, or has the wrong columns, is skipped and keeps its defaults. For a Google Sheet the tabs load in parallel with `Promise.allSettled`, and the column check matters because Google returns the *first* tab when a tab name is wrong. |
 | **One-line theming** | Change `--hue` in [`styles.css`](assets/css/styles.css) to recolour the whole site. |
 | **Zero tooling** | No bundler and no `node_modules`. Serve the folder with any static server; it's set up for free hosting on GitHub Pages from the `main` branch. |
 
@@ -201,7 +201,7 @@ Want to run it, deploy it or edit its content? See [About this repository](#-abo
 | Code & testing | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![Gunicorn](https://img.shields.io/badge/Gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white) ![unittest](https://img.shields.io/badge/unittest-2B5B84?style=for-the-badge&logo=python&logoColor=white) |
 | Containers & CI | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white) ![Trivy](https://img.shields.io/badge/Trivy-1904DA?style=for-the-badge&logo=trivy&logoColor=white) |
 | Infrastructure as Code | ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white) <br/> AWS provider configured for `ap-south-1`; resources are next |
-| Web | ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-663399?style=for-the-badge&logo=css&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white) ![Google Sheets](https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=googlesheets&logoColor=white) |
+| Web | ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-663399?style=for-the-badge&logo=css&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white) ![Excel](https://img.shields.io/badge/Excel-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white) |
 | Version control | ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) |
 
 **📚 Learning and practising: labs and coursework, not production experience yet**
@@ -226,7 +226,7 @@ Want to run it, deploy it or edit its content? See [About this repository](#-abo
 | Terraform (provider setup only so far) | [`provider.tf`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/provider.tf) |
 | Secrets hygiene in Git | [`.gitignore`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.gitignore) |
 | HTML, CSS, JavaScript | [`index.html`](index.html), [`styles.css`](assets/css/styles.css), [`main.js`](assets/js/main.js) |
-| Google Sheets as a lightweight CMS | [`data.js`](assets/js/data.js) and the loader in [`main.js`](assets/js/main.js) |
+| Excel / Google Sheets as a lightweight CMS | [`portfolio-data.xlsx`](portfolio-data.xlsx), [`data.js`](assets/js/data.js) and the loader in [`main.js`](assets/js/main.js) |
 
 </details>
 
@@ -278,14 +278,15 @@ This repository is the source of my portfolio website. Everything you need to ru
 <br/>
 
 ```text
-index.html              page structure (sections)
+index.html              page structure (sections) + icon sprite
+portfolio-data.xlsx     ALL the content (edit this)
 assets/css/styles.css   all design (change --hue to change the theme colour)
-assets/js/data.js       default content + SHEET_URL setting
-assets/js/main.js       renders content, Google Sheet loader, animations
+assets/js/data.js       fallback content + SHEET_URL setting
+assets/js/main.js       loads the content, renders the sections, animations
 assets/img/             photos (and project screenshots)
 assets/fonts/           Montserrat + Unbounded (self-hosted, no Google Fonts call)
 assets/pdf/             resume
-portfolio-data.xlsx     template for the Google Sheet
+assets/vendor/          third-party libraries (see Credits)
 ```
 
 </details>
@@ -316,23 +317,26 @@ python3 -m http.server 8000
 </details>
 
 <details>
-<summary><b>📊 Edit content from Google Sheets (one-time setup)</b></summary>
+<summary><b>📊 Edit content with Excel (no code)</b></summary>
 <br/>
 
-1. Upload [`portfolio-data.xlsx`](portfolio-data.xlsx) to Google Drive → open it → **File → Save as Google Sheets**.
-2. Click **Share** → General access: **Anyone with the link → Viewer**.
-3. Copy the sheet link and paste it into `SHEET_URL` at the top of [`assets/js/data.js`](assets/js/data.js). Commit and push.
-4. Done. Edit the sheet, then refresh the website.
+1. Download [`portfolio-data.xlsx`](portfolio-data.xlsx) and open it in Excel.
+2. Edit the tabs **Profile**, **Projects**, **Experience**, **Services** and **Testimonials** (the **How to use** tab inside the file repeats these rules).
+3. Save it with the same name.
+4. On GitHub: **Add file → Upload files** → drop the file → **Commit changes**.
+5. Wait 1-2 minutes and refresh the website.
 
-**Sheet rules**
+**Rules**
 
 - Keep the tab names exactly: `Profile`, `Projects`, `Experience`, `Services`, `Testimonials`.
-- Do not rename the column headers (first row) or the `key` names in `Profile`.
-- Multiple items in one cell → separate them with commas (`AWS, Terraform, Docker`).
+- Do not rename the column headers (first row) or the `key` names in `Profile`. In `Profile`, only change the `value` column.
+- Multiple items in one cell → separate them with commas (`AWS, Terraform, Docker`). New line in a cell → **Alt+Enter**.
 - `visible` = `no` hides a row. Testimonials stay hidden until you add one.
+- `hero_role` is the animated title in the hero; its last word goes on the white line.
 - In `about_text`, wrap words in `**double stars**` to highlight them in the theme colour (purple by default).
-- If a value disappears on the site, select the column → **Format → Number → Plain text**.
-- If the sheet can't be loaded, the site falls back to `data.js`, so the page still shows content.
+- If a tab can't be read, the site uses `data.js` for that tab, so the page still shows content.
+
+**Optional: live editing with Google Sheets.** Upload the file to Google Drive → open it with Google Sheets → **Share → Anyone with the link → Viewer**, then paste the sheet link into `SHEET_URL` at the top of [`assets/js/data.js`](assets/js/data.js). Edits in the sheet then show up after a refresh, without uploading anything. If a value disappears on the site, select the column → **Format → Number → Plain text**.
 
 </details>
 
@@ -356,10 +360,17 @@ Open [`assets/css/styles.css`](assets/css/styles.css) and change `--hue` at the 
 <summary><b>🙏 Credits</b></summary>
 <br/>
 
-- Layout inspired by [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/).
+- Design based on [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/) ("Panda Coders").
 - Built with AI pair-programming (Claude).
-- Fonts: Montserrat and Unbounded (self-hosted).
-- Icons: Remix Icon (inline SVG sprite in `index.html`).
+
+| Library | Used for | License |
+| :-- | :-- | :-- |
+| [Swiper](https://swiperjs.com) 11.2.10 | projects carousel | MIT |
+| [anime.js](https://animejs.com) 4.1.4 | animated title letters | MIT |
+| [ScrollReveal](https://scrollrevealjs.org) 4.0.9 | scroll animations | GPL-3.0 (free for non-commercial / open-source use) |
+| [SheetJS](https://sheetjs.com) 0.20.3 (mini) | reading the Excel file in the browser | Apache-2.0 |
+| [Remix Icon](https://remixicon.com) 4.6.0 | icons (inline SVG sprite) | Apache-2.0 |
+| Montserrat, Unbounded | fonts (self-hosted) | SIL Open Font License |
 
 </details>
 
