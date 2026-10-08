@@ -1,6 +1,6 @@
 <!-- Banner -->
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,40:0f2b46,100:ff9900&height=200&section=header&text=Saud&fontSize=65&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Aspiring%20Cloud%20Engineer%20%7C%20DevOps%20%7C%20Cloud%20Security&descAlignY=58&descSize=18&descColor=ffd28a" width="100%"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,40:0f2b46,100:ff9900&height=200&section=header&text=Mohd%20Saud&fontSize=65&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Aspiring%20Cloud%20Engineer%20%7C%20DevOps%20%7C%20Cloud%20Security&descAlignY=58&descSize=18&descColor=ffd28a" width="100%"/>
 </div>
 
 <!-- Typing SVG -->
@@ -34,7 +34,7 @@ I'm a **B.Tech Computer Science & Engineering** graduate (AKTU) building my care
 Before tech, I spent **3.5+ years in the automobile industry** (Service Advisor → Assistant Body Shop Manager at a Maruti Suzuki authorized dealership). That gave me real experience in customer handling, coordination, ownership and working under pressure. Now I'm combining that with technical skills to build reliable, secure systems.
 
 ```yaml
-name: Saud
+name: Mohd Saud
 role: Aspiring Cloud Engineer
 location: Lucknow, India
 focus:
