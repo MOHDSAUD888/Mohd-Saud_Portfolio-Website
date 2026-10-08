@@ -19,6 +19,13 @@ const splitList = (s) => String(s ?? "").split(/[,;]/).map((x) => x.trim()).filt
 const isVisible = (row) => String(row.visible ?? "yes").trim().toLowerCase() !== "no";
 const pad = (n) => String(n).padStart(2, "0");
 const $ = (sel) => document.querySelector(sel);
+// Icons come from the SVG sprite at the top of index.html
+const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#ri-${name}"></use></svg>`;
+// "github.com/user" or "www.linkedin.com/in/x" typed without https:// -> add it
+const normalizeLink = (u) => {
+  const url = String(u ?? "").trim();
+  return /^(www\.|[a-z0-9-]+\.(com|in|io|dev|me|org|net|app|co)(\/|$))/i.test(url) ? "https://" + url : url;
+};
 
 /*=============== GOOGLE SHEET LOADER ===============*/
 // Small CSV parser: handles quotes, commas and line breaks inside cells.
@@ -92,7 +99,7 @@ async function loadFromSheet(defaults) {
 function setLink(id, url) {
   const el = document.getElementById(id);
   if (!el) return;
-  const safe = safeUrl(url);
+  const safe = safeUrl(normalizeLink(url));
   el.hidden = !safe;
   if (safe) el.href = safe;
 }
@@ -136,10 +143,10 @@ function renderProjects(projects) {
     .map((p, i) => {
       const done = String(p.status).trim().toLowerCase().startsWith("complete");
       const img = safeUrl(p.image);
-      const link = safeUrl(p.link);
+      const link = safeUrl(normalizeLink(p.link));
       const media = img
         ? `<img src="${esc(img)}" alt="Screenshot of ${esc(p.title)}" class="projects__img" loading="lazy" />`
-        : `<div class="projects__placeholder"><i class="ri-cloud-line"></i><span>Screenshot coming soon</span></div>`;
+        : `<div class="projects__placeholder">${icon("cloud-line")}<span>Screenshot coming soon</span></div>`;
       return `
       <article class="projects__card">
         <div class="blob"></div>
@@ -155,7 +162,7 @@ function renderProjects(projects) {
         </div>
         <div class="projects__image">
           ${media}
-          ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener" class="projects__button" aria-label="Open ${esc(p.title)}"><i class="ri-arrow-right-up-long-line"></i></a>` : ""}
+          ${link ? `<a href="${esc(link)}" target="_blank" rel="noopener" class="projects__button" aria-label="Open ${esc(p.title)}">${icon("arrow-right-up-line")}</a>` : ""}
         </div>
       </article>`;
     })
@@ -164,7 +171,7 @@ function renderProjects(projects) {
   $("#projects-dots").innerHTML = list
     .map((_, i) => `<button class="projects__dot${i === 0 ? " active" : ""}" data-index="${i}" aria-label="Go to project ${i + 1}"></button>`)
     .join("");
-  requestAnimationFrame(() => typeof updateDots === "function" && updateDots());
+  updateDots();
 }
 
 /*=============== RENDER: EXPERIENCE / EDUCATION ===============*/
@@ -208,7 +215,7 @@ function renderServices(rows) {
           </ul>
         </div>
         <button class="services__button" aria-label="Show ${esc(s.title)} skills" aria-expanded="false">
-          <i class="ri-arrow-down-s-line"></i>
+          ${icon("arrow-down-s-line")}
         </button>
       </div>`
     )
@@ -224,7 +231,7 @@ function renderTestimonials(rows) {
   const card = (t) => {
     const img = safeUrl(t.image);
     const rating = Math.max(0, Math.min(5, Math.round(Number(t.rating) || 0)));
-    const stars = rating ? `<div class="testimonials__rating">${'<i class="ri-star-fill"></i>'.repeat(rating)}</div>` : "";
+    const stars = rating ? `<div class="testimonials__rating">${icon("star-fill").repeat(rating)}</div>` : "";
     const photo = img
       ? `<img src="${esc(img)}" alt="${esc(t.name)}" class="testimonials__img" loading="lazy" />`
       : `<div class="testimonials__avatar">${esc(String(t.name).trim().charAt(0).toUpperCase())}</div>`;
@@ -266,14 +273,20 @@ const cardStep = () => {
 };
 
 // Hide the dots when all cards already fit on screen
-const updateDots = () => ($("#projects-dots").hidden = track.scrollWidth <= track.clientWidth + 5);
+function updateDots() {
+  const t = $("#projects-track");
+  $("#projects-dots").hidden = t.scrollWidth <= t.clientWidth + 5;
+}
 window.addEventListener("resize", updateDots);
 
 track.addEventListener("scroll", () => {
   const step = cardStep();
   if (!step) return;
-  const index = Math.round(track.scrollLeft / step);
-  document.querySelectorAll(".projects__dot").forEach((d, i) => d.classList.toggle("active", i === index));
+  const dots = document.querySelectorAll(".projects__dot");
+  const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 5;
+  // the last card can't scroll fully to the left edge, so "at the end" = last dot
+  const index = atEnd ? dots.length - 1 : Math.round(track.scrollLeft / step);
+  dots.forEach((d, i) => d.classList.toggle("active", i === index));
 });
 
 $("#projects-dots").addEventListener("click", (e) => {
@@ -284,8 +297,9 @@ $("#projects-dots").addEventListener("click", (e) => {
 ["mouseenter", "touchstart", "focusin"].forEach((ev) => track.addEventListener(ev, () => (carouselPaused = true), { passive: true }));
 ["mouseleave", "touchend", "focusout"].forEach((ev) => track.addEventListener(ev, () => (carouselPaused = false), { passive: true }));
 
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 setInterval(() => {
-  if (carouselPaused || document.hidden) return;
+  if (carouselPaused || document.hidden || reduceMotion.matches) return;
   const max = track.scrollWidth - track.clientWidth;
   if (max <= 0) return;
   const next = track.scrollLeft + cardStep();
@@ -310,18 +324,23 @@ $("#services-container").addEventListener("click", (e) => {
   if (!card || (e.target.closest(".services__info") && !e.target.closest(".services__button"))) return;
   const wasOpen = card.classList.contains("services__open");
 
-  document.querySelectorAll(".services__card").forEach((c) => {
-    c.classList.replace("services__open", "services__close");
-    c.querySelector(".services__info").style.height = "0px";
-    c.querySelector(".services__button").setAttribute("aria-expanded", "false");
-  });
+  document.querySelectorAll(".services__open").forEach((c) => setServiceOpen(c, false));
+  if (!wasOpen) setServiceOpen(card, true);
+});
 
-  if (!wasOpen) {
-    const info = card.querySelector(".services__info");
-    card.classList.replace("services__close", "services__open");
-    info.style.height = info.scrollHeight + "px";
-    card.querySelector(".services__button").setAttribute("aria-expanded", "true");
-  }
+function setServiceOpen(card, open) {
+  const info = card.querySelector(".services__info");
+  info.style.height = info.scrollHeight + "px"; // start from a real pixel height ("auto" can't animate)
+  info.offsetHeight; // force the browser to apply it before changing again
+  card.classList.toggle("services__open", open);
+  card.classList.toggle("services__close", !open);
+  info.style.height = open ? info.scrollHeight + "px" : "0px";
+  card.querySelector(".services__button").setAttribute("aria-expanded", String(open));
+}
+
+// After opening, use height:auto so the chips can re-wrap if the window is resized
+$("#services-container").addEventListener("transitionend", (e) => {
+  if (e.propertyName === "height" && e.target.closest(".services__open")) e.target.style.height = "auto";
 });
 
 /*=============== COPY EMAIL ===============*/
@@ -330,11 +349,11 @@ copyBtn.addEventListener("click", async () => {
   const email = $('.contact__address[data-profile="email"]').textContent.trim();
   try {
     await navigator.clipboard.writeText(email);
-    copyBtn.innerHTML = 'Email copied <i class="ri-check-line"></i>';
+    copyBtn.innerHTML = `Email copied ${icon("check-line")}`;
   } catch {
     copyBtn.textContent = email; // clipboard blocked: show the email instead
   }
-  setTimeout(() => (copyBtn.innerHTML = 'Copy email <i class="ri-file-copy-line"></i>'), 2500);
+  setTimeout(() => (copyBtn.innerHTML = `Copy email ${icon("file-copy-line")}`), 2500);
 });
 
 /*=============== FOOTER YEAR ===============*/
@@ -344,24 +363,36 @@ $("#footer-year").textContent = new Date().getFullYear();
 const sections = document.querySelectorAll("section[id]");
 function scrollActive() {
   const y = window.scrollY;
-  sections.forEach((section) => {
+  const atBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 2;
+  const linked = [...sections].filter((s) => document.querySelector(`.nav__menu a[href="#${s.id}"]`));
+  linked.forEach((section, i) => {
     const link = document.querySelector(`.nav__menu a[href="#${section.id}"]`);
-    if (!link) return;
     const top = section.offsetTop - 80;
-    link.classList.toggle("active-link", y > top && y <= top + section.offsetHeight);
+    // the last section is often too short to reach the top of the screen
+    const active = atBottom ? i === linked.length - 1 : y > top && y <= top + section.offsetHeight;
+    link.classList.toggle("active-link", active);
   });
 }
 window.addEventListener("scroll", scrollActive, { passive: true });
 
 /*=============== CUSTOM CURSOR ===============*/
 const cursor = $(".cursor");
+let mouseInside = false, overClickable = false;
+const updateCursor = () => cursor.classList.toggle("hide-cursor", !mouseInside || overClickable);
 document.addEventListener("mousemove", (e) => {
   cursor.style.left = e.clientX + "px";
   cursor.style.top = e.clientY + "px";
+  mouseInside = true;
+  updateCursor();
 });
 // Shrink the cursor over clickable things so they stay readable
 document.addEventListener("mouseover", (e) => {
-  cursor.classList.toggle("hide-cursor", !!e.target.closest("a, button"));
+  overClickable = !!e.target.closest("a, button");
+  updateCursor();
+});
+document.documentElement.addEventListener("mouseleave", () => {
+  mouseInside = false;
+  updateCursor();
 });
 
 /*=============== SCROLL REVEAL ===============*/
@@ -378,7 +409,7 @@ const revealObserver = new IntersectionObserver(
 function setupReveal() {
   document
     .querySelectorAll(
-      ".home__data, .home__info, .about__data, .about__image, .section__title, .projects__card, .work__tabs, .work__card, .services__card, .contact__data, .contact__content > *"
+      ".home__data, .home__info, .about__data, .about__image, .section__title, .projects__track, .work__tabs, .work__card, .services__card, .contact__data, .contact__content > *"
     )
     .forEach((el) => {
       if (el.classList.contains("show")) return;

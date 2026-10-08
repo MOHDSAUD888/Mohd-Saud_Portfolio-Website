@@ -4,6 +4,7 @@ Personal portfolio for my Cloud / DevOps journey, built with plain HTML, CSS and
 Layout inspired by [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/).
 
 All text (profile, projects, experience, skills, testimonials) can be changed from a **Google Sheet**, with no code.
+No external CDN: fonts and icons (Remix Icon, inline SVG sprite in `index.html`) are bundled, so the site works offline too.
 
 ## Folder structure
 ```
@@ -12,6 +13,7 @@ assets/css/styles.css   all design (change --hue to change the theme color)
 assets/js/data.js       default content + SHEET_URL setting
 assets/js/main.js       renders content, Google Sheet loader, animations
 assets/img/             photos (and project screenshots)
+assets/fonts/           Montserrat + Unbounded (self-hosted, no Google Fonts call)
 assets/pdf/             resume
 portfolio-data.xlsx     template for the Google Sheet
 ```
