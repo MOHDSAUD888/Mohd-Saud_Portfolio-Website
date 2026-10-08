@@ -1221,8 +1221,10 @@ img {
     transform: translateY(-1.5rem);
   }
 
+  /* CHANGED: start the icons under the name (reference sits them at bottom: 3rem,
+     which cuts the last icon off on short laptop screens) */
   .home__social {
-    bottom: 3rem;
+    top: 24rem;
     row-gap: 1.5rem;
   }
 
@@ -1230,7 +1232,10 @@ img {
     font-size: 1.5rem;
   }
 
+  /* CHANGED: line the Resume link up with the last hero icon so it is visible on load */
   .home__cv {
+    top: 34rem;
+    bottom: initial;
     font-size: var(--normal-font-size);
     rotate: 0deg;
     right: 0;

@@ -186,6 +186,8 @@ const WRITE_LINKS = [
 
 const contactLink = (url, label, external = true) =>
   `<a href="${esc(url)}"${external ? ' target="_blank" rel="noopener"' : ""} class="contact__link">${esc(label)} ${icon("arrow-right-up-long-line")}</a>`;
+const heroLink = (url, label, ic, external = true) =>
+  `<a href="${esc(url)}"${external ? ' target="_blank" rel="noopener"' : ""} class="home__social-link" aria-label="${label}">${icon(ic)}</a>`;
 
 function renderProfile(p) {
   document.querySelectorAll("[data-profile]").forEach((el) => {
@@ -212,13 +214,14 @@ function renderProfile(p) {
   });
 
   const socials = SOCIALS.map(([key, label, ic]) => [link(p[key]), label, ic]).filter(([url]) => url);
-  $("#home-social").innerHTML = socials
-    .map(([url, label, ic]) => `<a href="${esc(url)}" target="_blank" rel="noopener" class="home__social-link" aria-label="${label}">${icon(ic)}</a>`)
-    .join("");
+  const email = String(p.email ?? "").trim();
+  // Hero icons: the social links, then a mail icon (mailto opens the mail app, so no new tab)
+  $("#home-social").innerHTML =
+    socials.map(([url, label, ic]) => heroLink(url, label, ic)).join("") +
+    (email ? heroLink(`mailto:${email}`, "Email", "mail-line", false) : "");
   $("#contact-social").innerHTML = socials.map(([url, label]) => contactLink(url, label)).join("");
 
   const write = WRITE_LINKS.map(([key, label]) => [link(p[key]), label]).filter(([url]) => url);
-  const email = String(p.email ?? "").trim();
   $("#contact-write").innerHTML =
     write.map(([url, label]) => contactLink(url, label)).join("") + (email ? contactLink(`mailto:${email}`, "Email", false) : "");
 }

@@ -44,14 +44,14 @@ const DEFAULT_DATA = {
     contact_title: "Contact Me",
     contact_text: "Open to Cloud / DevOps roles. Let's talk!",
 
-    email: "mosaud1997@icloud.com",
+    email: "mosaud1997@icloud.com", // also the mail icon in the hero
     location: "Lucknow, Uttar Pradesh, India",
 
     // Social links: leave empty to hide. Shown in the hero and under "Social Media".
     linkedin: "https://www.linkedin.com/in/mohdsaud1",
     github: "https://github.com/Iamsaudkhan",
     x: "",
-    instagram: "",
+    instagram: "https://www.instagram.com/i__amsaudkhan/",
     facebook: "",
     youtube: "",
     tiktok: "",
