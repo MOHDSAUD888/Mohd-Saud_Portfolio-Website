@@ -3,7 +3,7 @@
    1. Loads the content: Google Sheet -> Excel file -> data.js
    2. Renders every section from that content
    3. Starts the same interactions as the original design:
-      anime.js title, Swiper carousel, work tabs, services cards,
+      hero roles, Swiper carousel, work tabs, services cards,
       testimonials, copy email, active link, custom cursor, ScrollReveal
    You normally don't need to edit this file.
    ===================================================================== */
@@ -369,23 +369,52 @@ function renderAll(data) {
   return renderProjects(data.projects);
 }
 
-/*=============== HOME SPLIT TEXT (anime.js) ===============*/
-function startSplitText() {
-  if (typeof anime === "undefined" || reduceMotion.matches) return;
-  const { animate, text, stagger } = anime;
-  const { chars: chars1 } = text.split(".home__profession-1", { chars: true });
-  const { chars: chars2 } = text.split(".home__profession-2", { chars: true });
-  const options = {
-    y: [{ to: ["100%", "0%"] }, { to: "-100%", delay: 4000, ease: "in(3)" }],
-    duration: 900,
-    ease: "out(3)",
-    delay: stagger(80),
-    loop: true,
+/*=============== HOME ROLES (word reveal) ===============*/
+// "Cloud Security Engineer" -> ["Cloud Security", "Engineer"]: purple line + white line
+const splitRole = (role) => {
+  const words = role.trim().split(/\s+/);
+  return words.length > 1 ? [words.slice(0, -1).join(" "), words.at(-1)] : [role.trim(), ""];
+};
+
+function startRoles(p) {
+  const roles = splitList(p.hero_roles);
+  if (!roles.length) roles.push([p.hero_profession1, p.hero_profession2].filter(Boolean).join(" ") || "Cloud DevOps Engineer");
+  const box = $("#home-role");
+  const words = box.querySelectorAll(".home__word");
+  const show = (i) => {
+    splitRole(roles[i]).forEach((text, n) => (words[n].textContent = text));
+    box.setAttribute("aria-label", roles[i]);
   };
-  // Lines with fewer letters wait a bit longer, so both loops stay in sync
-  const longest = Math.max(chars1.length, chars2.length);
-  animate(chars1, { ...options, loopDelay: (longest - chars1.length) * 80 });
-  animate(chars2, { ...options, loopDelay: (longest - chars2.length) * 80 });
+  show(0);
+  // Fixed size for the widest role, so changing roles never moves the layout
+  const fit = () => {
+    box.style.minWidth = "";
+    let width = 0;
+    roles.forEach((_, i) => {
+      show(i);
+      width = Math.max(width, ...[...words].map((w) => w.scrollWidth));
+    });
+    show(current);
+    box.style.minWidth = `${Math.ceil(width)}px`;
+  };
+  let current = 0;
+  document.fonts?.ready.then(fit);
+  window.addEventListener("resize", fit);
+  fit();
+  box.classList.add("is-in");
+  if (roles.length < 2) return;
+
+  const HOLD = 3200, EXIT = 700;
+  setInterval(() => {
+    box.classList.replace("is-in", "is-out");
+    setTimeout(() => {
+      current = (current + 1) % roles.length;
+      box.classList.remove("is-out");
+      show(current);
+      void box.offsetWidth; // restart from the "below the mask" position
+      box.classList.add("is-in");
+    }, EXIT);
+  }, HOLD + EXIT);
 }
 
 /*=============== SWIPER PROJECTS ===============*/
@@ -578,7 +607,7 @@ if (typeof DEFAULT_DATA === "undefined") {
     }
 
     const projectCount = renderAll(data);
-    startSplitText();
+    startRoles(data.profile);
     startSwiper(projectCount);
     startScrollReveal();
   } catch (err) {

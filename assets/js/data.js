@@ -21,8 +21,8 @@ const DEFAULT_DATA = {
     name_line1: "Mohd",
     name_line2: "Saud",
     hero_split: "Aspiring",
-    hero_profession1: "Cloud DevOps",
-    hero_profession2: "Engineer",
+    // Roles shown one after another under hero_split (comma separated; the last word goes on the white line)
+    hero_roles: "Cloud DevOps Engineer, Cloud Engineer, DevSecOps Engineer, Cloud Security Engineer",
     hero_image: "assets/img/hero-profile.webp",
     about_image: "assets/img/about-profile.webp",
     resume: "assets/pdf/Mohd-Saud-Resume.pdf",
