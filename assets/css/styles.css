@@ -158,6 +158,9 @@ img {
 
 .main {
   overflow: hidden;
+  /* CHANGED: "clip" cuts off the overflow like "hidden" but is not a scroll
+     container, so "position: sticky" in the pipeline section still works */
+  overflow: clip;
 }
 
 /* Blob */
@@ -1657,5 +1660,346 @@ html {
   }
   .projects__placeholder {
     border-radius: 2rem;
+  }
+}
+
+/*=============== PIPELINE ON SCROLL (ADDED) ===============*/
+/* Base = static list (no JavaScript, or "reduce motion" switched on).
+   main.js adds .pipeline--live: the section pins and replays one stage at a time. */
+.pipeline__head .section__title {
+  text-align: initial;
+  margin-bottom: 1rem;
+}
+
+.pipeline__lead {
+  max-width: 34rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Stage track: nodes joined by a line that fills as the run moves on */
+.pipeline__track {
+  --pipe-fill: 1;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-bottom: 2rem;
+}
+
+.pipeline__track::before,
+.pipeline__track::after {
+  content: "";
+  position: absolute;
+  top: 1.25rem;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background-color: var(--container-color);
+}
+
+.pipeline__track::after {
+  background-color: var(--first-color);
+  transform-origin: left;
+  transform: scaleX(var(--pipe-fill));
+}
+
+.pipeline__stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  row-gap: 0.5rem;
+}
+
+.pipeline__node {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--body-color);
+  border: 2px solid var(--text-color-light);
+  color: var(--text-color);
+  font: var(--font-semi-bold) var(--small-font-size) var(--second-font);
+  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+
+.pipeline__node > * {
+  grid-area: 1 / 1;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.pipeline__node .icon {
+  font-size: 1.25rem;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.pipeline__label {
+  font: var(--font-medium) var(--small-font-size) var(--second-font);
+  color: var(--text-color);
+}
+
+/* Done: filled node with a check mark */
+.pipeline__stage.is-done .pipeline__node,
+.pipeline:not(.pipeline--live) .pipeline__node {
+  background-color: var(--first-color);
+  border-color: var(--first-color);
+  color: var(--body-color);
+}
+.pipeline__stage.is-done .pipeline__num,
+.pipeline:not(.pipeline--live) .pipeline__num {
+  opacity: 0;
+}
+.pipeline__stage.is-done .pipeline__node .icon,
+.pipeline:not(.pipeline--live) .pipeline__node .icon {
+  opacity: 1;
+  transform: scale(1);
+}
+.pipeline__stage.is-done .pipeline__label,
+.pipeline__stage.is-running .pipeline__label {
+  color: var(--title-color);
+}
+
+/* Running: a ring turns around the node */
+.pipeline__stage.is-running .pipeline__node {
+  border-color: var(--first-color);
+  color: var(--title-color);
+}
+.pipeline__stage.is-running .pipeline__node::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--first-color-light);
+  animation: pipelineSpin 0.9s linear infinite;
+}
+
+@keyframes pipelineSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Detail cards */
+.pipeline__panel {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.pipeline__detail {
+  position: relative;
+  background-color: var(--container-color);
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid hsla(var(--hue), 60%, 64%, 0.15);
+}
+
+.pipeline__detail p + p {
+  margin-top: 0.75rem;
+}
+
+.pipeline__step {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font: var(--font-medium) var(--smaller-font-size) ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color: var(--first-color-light);
+}
+
+.pipeline__title {
+  font-size: var(--h3-font-size);
+  margin-bottom: 0.75rem;
+}
+
+.pipeline__detail b {
+  color: var(--title-color);
+  font-weight: var(--font-semi-bold);
+}
+
+.pipeline__detail code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  color: var(--first-color-light);
+}
+
+.pipeline__why {
+  color: var(--text-color-light);
+}
+
+.pipeline__link,
+.pipeline__badge {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 0.25rem;
+  margin-top: 1rem;
+  color: var(--first-color-light);
+  font: var(--font-medium) var(--small-font-size) var(--second-font);
+}
+
+.pipeline__link:hover {
+  color: var(--title-color);
+}
+
+.pipeline__link:focus-visible,
+.pipeline__badge:focus-visible {
+  outline: 2px solid var(--first-color);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.pipeline__badge img {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.pipeline__next {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pipeline__next li {
+  padding: 0.35rem 0.85rem;
+  border-radius: 4rem;
+  border: 1px dashed var(--first-color);
+  color: var(--first-color-light);
+  font-size: var(--smaller-font-size);
+}
+
+.pipeline__result {
+  border-color: hsla(var(--hue), 60%, 64%, 0.5);
+}
+
+/* Live mode: the frame sticks while the section scrolls past, one card at a time */
+.pipeline.pipeline--live {
+  height: 380vh;
+  padding-block: 0;
+}
+
+.pipeline--live .pipeline__frame {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  /* clear the fixed header (4 stacked links on phones/tablets) */
+  padding-top: 7.5rem;
+}
+
+.pipeline--live .pipeline__container {
+  width: 100%;
+}
+
+.pipeline--live .pipeline__panel {
+  gap: 0;
+}
+
+.pipeline--live .pipeline__detail {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.pipeline--live .pipeline__detail.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+/* The finish: the whole track turns green when every stage has run */
+.pipeline--live.is-passed .pipeline__track::after {
+  background-color: hsl(145, 55%, 50%);
+}
+.pipeline--live.is-passed .pipeline__stage.is-done .pipeline__node {
+  background-color: hsl(145, 55%, 50%);
+  border-color: hsl(145, 55%, 50%);
+}
+.pipeline--live.is-passed .pipeline__result {
+  border-color: hsl(145, 55%, 50%);
+}
+
+/* Short phones: hide the intro line so the card fits under the header */
+@media screen and (max-height: 760px) and (max-width: 1149px) {
+  .pipeline--live .pipeline__lead {
+    display: none;
+  }
+  .pipeline--live .pipeline__head .section__title {
+    margin-bottom: 1.25rem;
+  }
+  .pipeline--live .pipeline__track {
+    margin-bottom: 1.25rem;
+  }
+  .pipeline--live .pipeline__detail {
+    padding: 1.25rem;
+  }
+  .pipeline--live .pipeline__next {
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+  }
+  .pipeline--live .pipeline__next li {
+    padding: 0.25rem 0.6rem;
+  }
+}
+
+/* 2K screens use "body { zoom: 1.4 }", which also enlarges vh: keep the frame one screen tall */
+@media screen and (min-width: 2048px) {
+  .pipeline--live .pipeline__frame {
+    height: calc(100vh / 1.4);
+    height: calc(100svh / 1.4);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .pipeline:not(.pipeline--live) .pipeline__panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pipeline__detail {
+    padding: 2rem;
+    border-radius: 2rem;
+  }
+}
+
+@media screen and (min-width: 1150px) {
+  .pipeline:not(.pipeline--live) .pipeline__panel {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pipeline--live .pipeline__frame {
+    padding-top: 5.5rem;
+  }
+
+  /* Desktop: title on the left, track and card on the right */
+  .pipeline--live .pipeline__container {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 4rem;
+    align-items: start;
+  }
+  .pipeline--live .pipeline__head {
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+  .pipeline--live .pipeline__track {
+    margin-bottom: 2.5rem;
+  }
+
+  .pipeline__node {
+    width: 3rem;
+    height: 3rem;
+  }
+  .pipeline__track::before,
+  .pipeline__track::after {
+    top: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pipeline__stage.is-running .pipeline__node::after {
+    animation: none;
   }
 }

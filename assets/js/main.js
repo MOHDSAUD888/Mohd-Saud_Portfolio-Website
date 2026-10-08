@@ -4,7 +4,8 @@
    2. Renders every section from that content
    3. Starts the same interactions as the original design:
       anime.js title, Swiper carousel, work tabs, services cards,
-      testimonials, copy email, active link, custom cursor, ScrollReveal
+      testimonials, copy email, active link, custom cursor, ScrollReveal,
+      plus the pipeline-on-scroll section (ADDED)
    You normally don't need to edit this file.
    ===================================================================== */
 
@@ -548,6 +549,62 @@ document.addEventListener("mouseout", (e) => {
   if (mouseMoved && a && !a.contains(e.relatedTarget)) cursor.classList.remove("hide-cursor");
 });
 
+/*=============== PIPELINE ON SCROLL (ADDED) ===============*/
+// The pipeline section pins while it scrolls past, and the scroll position
+// decides which CI stage is "running". Stages use the first 70% of the
+// scroll; the result card holds for the rest, so the finish gets the most room.
+// With "reduce motion" switched on, the section stays a static list.
+function startPipeline() {
+  const pipeline = $("#pipeline");
+  if (!pipeline || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const stages = pipeline.querySelectorAll("[data-stage]");
+  const details = pipeline.querySelectorAll("[data-detail]"); // one per stage + the result
+  const track = pipeline.querySelector(".pipeline__track");
+  const STAGES_END = 0.7;
+  let current = -1;
+
+  pipeline.classList.add("pipeline--live");
+
+  const update = () => {
+    const box = pipeline.getBoundingClientRect();
+    const room = box.height - window.innerHeight;
+    const p = room > 0 ? Math.min(1, Math.max(0, -box.top / room)) : 1;
+    const pos = (p / STAGES_END) * stages.length; // stage i runs while pos is between i and i + 1
+    const step = Math.min(stages.length, Math.floor(pos));
+
+    // The line reaches a node when that stage starts running
+    track.style.setProperty("--pipe-fill", Math.min(1, pos / (stages.length - 1)));
+    if (step === current) return;
+    current = step;
+
+    stages.forEach((stage, i) => {
+      stage.classList.toggle("is-done", i < step);
+      stage.classList.toggle("is-running", i === step);
+      if (i === step) stage.setAttribute("aria-current", "step");
+      else stage.removeAttribute("aria-current");
+    });
+    details.forEach((card, i) => {
+      card.classList.toggle("is-active", i === step);
+      card.inert = i !== step; // hidden cards: no focus, not read out
+    });
+    pipeline.classList.toggle("is-passed", step === stages.length);
+  };
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      update();
+    });
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  update();
+}
+
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 function startScrollReveal() {
   if (typeof ScrollReveal === "undefined") return;
@@ -595,6 +652,7 @@ if (typeof DEFAULT_DATA === "undefined") {
     startSplitText();
     startSwiper(projectCount);
     startScrollReveal();
+    startPipeline();
   } catch (err) {
     console.error(err);
   } finally {

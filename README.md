@@ -173,6 +173,7 @@ My personal portfolio, built with **plain HTML, CSS and JavaScript**: no framewo
 
 - **Excel as a CMS:** profile, projects, experience, skills and testimonials live in [`portfolio-data.xlsx`](portfolio-data.xlsx). Edit it in Excel, upload it to GitHub, and the site updates, no code needed. A Google Sheet can be connected instead via `SHEET_URL`. If neither can be read, the site falls back to the defaults in [`data.js`](assets/js/data.js).
 - **Spreadsheet content treated as untrusted:** every value is HTML-escaped, and links are limited to `http(s)`, `mailto` or relative paths before rendering.
+- **Pipeline on scroll:** a section that replays the real SecureOps CI workflow (push, install, test, build, Trivy scan) one stage at a time as you scroll, with a link to the code behind each stage and a live CI status badge. With "reduce motion" switched on, it shows as a static list.
 - **No external CDN:** fonts (Montserrat, Unbounded), libraries (Swiper, anime.js, ScrollReveal, SheetJS) and icons (Remix Icon, as an inline SVG sprite) are all served from this repository.
 
 <details>
