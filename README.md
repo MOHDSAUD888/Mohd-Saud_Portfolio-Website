@@ -1,154 +1,391 @@
-<!-- Banner -->
+<!-- ============================== HEADER ============================== -->
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,40:0f2b46,100:ff9900&height=200&section=header&text=Saud&fontSize=65&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Aspiring%20Cloud%20Engineer%20%7C%20DevOps%20%7C%20Cloud%20Security&descAlignY=58&descSize=18&descColor=ffd28a" width="100%"/>
+  <img src="https://capsule-render.vercel.app/api?type=wave&color=0:0d1117,50:0f2b46,100:ff9900&height=230&section=header&text=Mohd%20Saud&fontSize=56&fontColor=ffffff&animation=fadeIn&fontAlignY=24&desc=Aspiring%20Cloud%20and%20DevOps%20Engineer&descSize=22&descAlignY=43" width="100%" alt="Mohd Saud: Aspiring Cloud and DevOps Engineer"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&duration=3000&pause=1000&color=FF9900&center=true&vCenter=true&width=640&height=45&lines=Learning+Cloud+%26+DevOps+by+building;From+automobiles+to+the+cloud;Docker+%C2%B7+GitHub+Actions+%C2%B7+Trivy">
+    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=22&duration=3000&pause=1000&color=9A5B00&center=true&vCenter=true&width=640&height=45&lines=Learning+Cloud+%26+DevOps+by+building;From+automobiles+to+the+cloud;Docker+%C2%B7+GitHub+Actions+%C2%B7+Trivy" alt="Learning Cloud and DevOps by building."/>
+  </picture>
 </div>
 
-<!-- Typing SVG -->
+<p align="center">
+  <b>B.Tech CSE graduate with nearly 4 years of customer-facing operations experience,<br/>now building a hands-on DevSecOps pipeline with Python, Docker, GitHub Actions and Trivy, with Terraform on AWS up next.</b>
+</p>
+
 <div align="center">
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&duration=2800&pause=900&color=FF9900&center=true&vCenter=true&multiline=true&repeat=true&width=750&height=90&lines=%E2%98%81%EF%B8%8F+Hi%2C+I'm+Saud!;%F0%9F%9B%A0%EF%B8%8F+Learning+Cloud+%26+DevOps+by+Building;%F0%9F%94%90+Long-term+Goal%3A+Cloud+Security+Engineer" alt="Typing SVG"/>
-  </a>
+
+📍 Lucknow, Uttar Pradesh, India
+
+[![Status: open to Cloud / DevOps roles][b-status]](#-lets-connect)
+[![SecureOps CI workflow status][b-ci]](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/actions/workflows/ci-cd.yml)
+
+**[Featured: SecureOps Dashboard](#-secureops-dashboard-a-devsecops-pipeline)** &nbsp;·&nbsp;
+**[Live portfolio](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)** &nbsp;·&nbsp;
+**[LinkedIn](https://www.linkedin.com/in/mohdsaud1/)** &nbsp;·&nbsp;
+**[Email](mailto:mosaud1997@icloud.com)**
+
+<sub>[At a glance](#-at-a-glance) · [Projects](#-featured-projects) · [Skills](#-skills) · [Journey](#-my-journey) · [Contact](#-lets-connect) · [Run this site](#-about-this-repository)</sub>
+
 </div>
-
-<br/>
-
-<!-- Badges -->
-<div align="center">
-  <a href="https://github.com/MOHDSAUD888?tab=followers">
-    <img src="https://img.shields.io/github/followers/MOHDSAUD888?style=for-the-badge&color=ff9900&labelColor=0d1117&label=Followers&logo=github" alt="Followers"/>
-  </a>
-  &nbsp;
-  <a href="https://github.com/MOHDSAUD888?tab=stars">
-    <img src="https://img.shields.io/github/stars/MOHDSAUD888?style=for-the-badge&color=ff9900&labelColor=0d1117&label=Stars&logo=github" alt="Stars"/>
-  </a>
-</div>
-
-<br/>
 
 ---
 
-## 👋 About Me
+## 📌 At a Glance
 
-I'm a **B.Tech Computer Science & Engineering** graduate (AKTU) building my career in **Cloud Engineering and DevOps**, with **Cloud Security** as my long-term direction.
+<table>
+  <tr><td><b>Looking for</b></td><td>Entry-level Cloud / DevOps roles and internships</td></tr>
+  <tr><td><b>Education</b></td><td>B.Tech, Computer Science &amp; Engineering, AKTU Lucknow (graduated June 2026)</td></tr>
+  <tr><td><b>Experience</b></td><td>Nearly 4 years as a Service Advisor at an authorised Maruti Suzuki dealership</td></tr>
+  <tr><td><b>Hands-on</b></td><td>Python, Flask, Docker, GitHub Actions, Trivy, Git, GitHub Pages; Terraform (AWS provider configured, resources next)</td></tr>
+  <tr><td><b>Certification</b></td><td>Preparing for AWS Solutions Architect – Associate (not yet certified)</td></tr>
+  <tr><td><b>Location</b></td><td>Lucknow, Uttar Pradesh, India</td></tr>
+</table>
 
-Before tech, I spent **3.5+ years in the automobile industry** (Service Advisor → Assistant Body Shop Manager at a Maruti Suzuki authorized dealership). That gave me real experience in customer handling, coordination, ownership and working under pressure. Now I'm combining that with technical skills to build reliable, secure systems.
+**What I bring**
 
-```yaml
-name: Saud
-role: Aspiring Cloud Engineer
-location: Lucknow, India
-focus:
-  - Cloud (AWS)
-  - DevOps & CI/CD
-  - Containers (Docker)
-  - Infrastructure as Code (Terraform)
-  - DevSecOps / Cloud Security
-status: Open to Cloud / DevOps entry-level roles and internships
+- A CI pipeline ([SecureOps](#-secureops-dashboard-a-devsecops-pipeline)) that tests, builds and Trivy-scans a Docker image on every push.
+- Secrets hygiene from the start: Terraform state, `tfvars`, `.env` files and keys are kept out of Git.
+- 3 years 8 months as a Service Advisor in a high-volume workshop: handling escalations, coordinating with technicians, and managing service documentation and billing.
+
+---
+
+## 🚀 Featured Projects
+
+### 🔐 SecureOps Dashboard: a DevSecOps pipeline
+
+[![Status: in progress][b-wip]](https://github.com/MOHDSAUD888/Secure-cloud-devsecops)
+[![SecureOps CI workflow status][b-ci]](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/actions/workflows/ci-cd.yml)
+[![View repository][b-repo-secureops]](https://github.com/MOHDSAUD888/Secure-cloud-devsecops)
+
+A small Flask app wrapped in a **DevSecOps pipeline**, built to practise how teams ship code safely. The point is the path from `git push` to a **tested, containerised and vulnerability-scanned image**, not the app itself: the dashboard is a static page, and its status cards are placeholders, not live data. The AWS deployment half is what I'm building next.
+
+```mermaid
+flowchart TB
+    subgraph BUILT["✅ Built"]
+        direction LR
+        A["git push"] --> B["Install deps<br/>Python 3.12"] --> C["Unit tests<br/>unittest"] --> D["Docker build<br/>tagged with commit SHA"] --> E["Trivy image scan<br/>HIGH + CRITICAL<br/>(reports only)"]
+    end
+    subgraph NEXT["🔜 Planned"]
+        direction LR
+        F["Fail build on<br/>HIGH / CRITICAL"] -.-> G["GitHub OIDC<br/>to AWS"] -.-> H["Push image<br/>to Amazon ECR"] -.-> I["Deploy to EC2<br/>infra via Terraform"] -.-> J["CloudWatch<br/>alarms"]
+    end
+    BUILT -.-> NEXT
+
+    classDef built fill:#0f2b46,stroke:#ff9900,stroke-width:2px,color:#ffffff
+    classDef planned fill:#fff4e0,stroke:#b86e00,stroke-width:1px,stroke-dasharray:5 5,color:#5c3a00
+    class A,B,C,D,E built
+    class F,G,H,I,J planned
+    style BUILT fill:none,stroke:#ff9900
+    style NEXT fill:none,stroke:#b86e00,stroke-dasharray:5 5
 ```
 
-- 🌱 **Currently learning:** AWS fundamentals, Linux, Docker, Terraform, CI/CD, IAM & cloud security basics
-- 🔨 **Currently building:** [SecureOps Dashboard](#-featured-project) (DevSecOps pipeline project)
-- 🐍 **Language:** Python
-- 🎯 **Career path:** Cloud Engineer → Senior Cloud Engineer → Cloud Security Engineer → Cloud Security Architect
-- 💬 **Ask me about:** My career switch from automobile to tech, Python, AWS basics, CI/CD pipelines
+<sub>Solid boxes run in CI today. Dashed boxes are planned and not built yet.</sub>
 
----
+<table>
+  <tr>
+    <th width="55%">✅ Built: in the repo today</th>
+    <th width="45%">🔜 Planned next</th>
+  </tr>
+  <tr>
+    <td valign="top">
 
-## 🛠️ Tech Stack
+- **[App](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/tree/main/app):** Flask on Python 3.12 serving one static dashboard page (placeholder status cards, not live data), with a `unittest` check that `GET /` returns 200
+- **[Container](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/docker/Dockerfile):** `python:3.12-slim` base, no pip cache, **Gunicorn** on port 5000, plus a `.dockerignore`
+- **[CI](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.github/workflows/ci-cd.yml):** the *SecureOps CI* workflow installs dependencies, runs the tests, builds the image tagged with the commit SHA and runs a **Trivy** scan for HIGH and CRITICAL vulnerabilities (reports findings, does not fail the build yet)
+- **[Terraform](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/provider.tf):** AWS provider `~> 6.0` for `ap-south-1` (Mumbai), lock file committed, no resources defined yet
+- **[Secrets hygiene](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.gitignore):** `.gitignore` keeps Terraform state, `tfvars`, `.env` files, keys and AWS credentials out of Git
 
-**☁️ Cloud & Infrastructure**
+<sub>Each label links to the code in the repo.</sub>
 
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=ff9900)
-![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+</td>
+    <td valign="top">
 
-**🔄 DevOps & CI/CD**
+- Fail the pipeline on HIGH / CRITICAL findings
+- Trivy IaC and filesystem scans
+- GitHub OIDC to AWS, so no long-lived access keys
+- Push the image to Amazon ECR
+- Terraform: VPC, subnets, security groups and EC2
+- Deploy the container to EC2
+- Secrets Manager and a least-privilege IAM role
+- CloudWatch alarms
+- Remote Terraform state in S3, with state locking
 
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+</td>
+  </tr>
+</table>
 
-**🔐 Security**
-
-![Trivy](https://img.shields.io/badge/Trivy-1904DA?style=for-the-badge&logo=aqua&logoColor=white)
-![OIDC](https://img.shields.io/badge/GitHub_OIDC-181717?style=for-the-badge&logo=github&logoColor=white)
-
-**💻 Programming**
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
-
----
-
-## 🚀 Featured Project
-
-### 🛡️ SecureOps Dashboard
-A Flask web app wrapped in a **DevSecOps CI/CD pipeline**, built to practice how real teams ship code securely to the cloud.
-
-| Area | What I'm using |
-|------|----------------|
-| Application | Python, Flask |
-| Containerization | Docker |
-| CI/CD | GitHub Actions |
-| Security scanning | Trivy (container/image vulnerability scan) |
-| Infrastructure as Code | Terraform |
-| Cloud | AWS |
-| Secure auth to AWS | GitHub OIDC (no long-lived access keys) |
-
-**What it demonstrates:** automated build → scan → deploy flow, infrastructure defined as code, and keyless authentication between GitHub and AWS.
-
-> 🔗 Repo: [MOHDSAUD888/Secure-cloud-devsecops](https://github.com/MOHDSAUD888/Secure-cloud-devsecops)
-
----
-
-## 🗺️ My Learning Roadmap
-
-- [x] Python fundamentals
-- [x] Git & GitHub basics
-- [ ] Linux & networking fundamentals
-- [ ] AWS core services (EC2, S3, VPC, IAM)
-- [ ] Docker & containers
-- [ ] CI/CD with GitHub Actions
-- [ ] Terraform (Infrastructure as Code)
-- [ ] DevSecOps practices (scanning, least privilege, secrets management)
-- [ ] AWS certification (Cloud Practitioner → Solutions Architect Associate)
-- [ ] Cloud Security specialization
-
----
-
-## 📊 GitHub Stats
-
-<div align="center">
-  <img height="170" src="https://github-readme-stats.vercel.app/api?username=MOHDSAUD888&show_icons=true&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=ff9900&icon_color=ff9900&text_color=ffd28a" alt="GitHub Stats"/>
-  <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MOHDSAUD888&layout=compact&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=ff9900&text_color=ffd28a" alt="Top Languages"/>
-</div>
-
-<div align="center">
-  <img src="https://streak-stats.demolab.com/?user=MOHDSAUD888&theme=github-dark-blue&hide_border=true&background=0d1117&ring=ff9900&fire=ff9900&currStreakLabel=ff9900&sideLabels=ffd28a&dates=8b949e&stroke=21262d" alt="Streak Stats"/>
-</div>
-
----
-
-## 🤝 Connect With Me
-
-<div align="center">
-  <a href="https://www.linkedin.com/in/mohdsaud1/" target="_blank">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
-  </a>
-  &nbsp;
-  <a href="https://github.com/MOHDSAUD888" target="_blank">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
-  </a>
-  &nbsp;
-  <a href="mailto:mosaud1997@icloud.com">
-    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
-  </a>
-</div>
-
+<details>
+<summary><b>💡 Design notes: the "why" behind each choice</b></summary>
 <br/>
 
-<!-- Footer -->
+- **Why tag the image with the commit SHA?** Every image maps to exactly one commit, so a scan result can be traced back to the code that produced it. A shared `latest` tag can't do that. (The image isn't pushed to a registry yet; ECR is planned.)
+- **Why `python:3.12-slim` and `--no-cache-dir`?** A smaller base image means fewer OS packages to patch and fewer findings for Trivy to report, and no pip cache gets baked into an image layer.
+- **Why Gunicorn instead of `app.run()`?** Flask's built-in server is meant for development only. Gunicorn is a production-grade WSGI server, so the container doesn't rely on Flask's development server.
+- **What does the Trivy step do today?** It scans the freshly built image for HIGH and CRITICAL vulnerabilities and skips ones with no fix available yet (`ignore-unfixed`), so the report stays actionable. It reports in the job log but does not fail the build; turning it into a hard gate is the next step.
+- **Why keep `*.tfstate` and `*.tfvars` out of Git?** Terraform state and variable files can hold resource details and secrets in plain text. The plan is remote state in S3 with state locking, so state lives neither in Git nor on a laptop.
+- **Why OIDC for AWS (planned)?** GitHub Actions can exchange a short-lived OIDC token for temporary AWS credentials scoped to one IAM role, so no long-lived access keys are stored as repository secrets.
+
+</details>
+
+<details>
+<summary><b>📁 Repository layout and how to run it locally</b></summary>
+<br/>
+
+```text
+Secure-cloud-devsecops/
+├── app/
+│   ├── app.py                  # Flask app, one route: GET /
+│   ├── test_app.py             # unittest: GET / returns 200
+│   ├── requirements.txt        # pinned versions (Flask, Gunicorn, ...)
+│   ├── templates/index.html    # static dashboard page (placeholder cards)
+│   └── static/style.css
+├── docker/Dockerfile           # python:3.12-slim + Gunicorn on :5000
+├── .github/workflows/ci-cd.yml # SecureOps CI: test -> build -> Trivy scan
+├── provider.tf                 # Terraform AWS provider (~> 6.0), ap-south-1
+├── .terraform.lock.hcl
+├── .dockerignore
+└── .gitignore                  # state, tfvars, .env, keys, AWS credentials
+```
+
+The same steps CI runs:
+
+```bash
+git clone https://github.com/MOHDSAUD888/Secure-cloud-devsecops.git
+cd Secure-cloud-devsecops
+
+pip install -r app/requirements.txt
+python -m unittest discover app
+
+docker build -t secureops:local -f docker/Dockerfile .
+docker run --rm -p 5000:5000 secureops:local      # open http://localhost:5000
+
+# optional: the same scan CI runs (needs Trivy installed)
+trivy image --severity HIGH,CRITICAL --ignore-unfixed secureops:local
+```
+
+</details>
+
+### 🌐 Portfolio Website: this repository
+
+[![Status: completed][b-done]](#-portfolio-website-this-repository)
+[![Open live site][b-live]](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)
+
+My personal portfolio, built with **plain HTML, CSS and JavaScript**: no framework and no build step. Layout inspired by [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/).
+
+- **Google Sheet as a CMS:** profile, projects, experience, skills and testimonials can be edited from a Google Sheet (connect one via `SHEET_URL`), no code needed. If the sheet can't be loaded, the site falls back to the defaults in [`data.js`](assets/js/data.js).
+- **Sheet content treated as untrusted:** every value is HTML-escaped, and links are limited to `http(s)`, `mailto` or relative paths before rendering.
+- **No external CDN:** fonts (Montserrat, Unbounded) are self-hosted and icons (Remix Icon) are an inline SVG sprite, so it works offline.
+
+<details>
+<summary><b>⚙️ Under the hood: how the content loads</b></summary>
+<br/>
+
+| How it works | Why it matters |
+| :-- | :-- |
+| **Defaults first, sheet second** | [`main.js`](assets/js/main.js) renders the content in [`data.js`](assets/js/data.js) immediately, then loads the sheet (if one is connected) and re-renders only if the data actually changed. No blank page while waiting on Google. |
+| **Per-tab fallback** | The five tabs load in parallel with `Promise.allSettled`. A tab that fails, or is missing its required columns, is skipped and keeps its defaults. The column check matters because Google returns the *first* tab when a tab name is wrong. |
+| **One-line theming** | Change `--hue` in [`styles.css`](assets/css/styles.css) to recolour the whole site. |
+| **Zero tooling** | No bundler and no `node_modules`. Serve the folder with any static server; it's set up for free hosting on GitHub Pages from the `main` branch. |
+
+</details>
+
+Want to run it, deploy it or edit its content? See [About this repository](#-about-this-repository).
+
+---
+
+## 🧰 Skills
+
+**✅ Hands-on: used in my public repositories**
+
+| Area | Tools |
+| :-- | :-- |
+| Code & testing | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![Gunicorn](https://img.shields.io/badge/Gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white) ![unittest](https://img.shields.io/badge/unittest-2B5B84?style=for-the-badge&logo=python&logoColor=white) |
+| Containers & CI | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white) ![Trivy](https://img.shields.io/badge/Trivy-1904DA?style=for-the-badge&logo=trivy&logoColor=white) |
+| Infrastructure as Code | ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white) <br/> AWS provider configured for `ap-south-1`; resources are next |
+| Web | ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-663399?style=for-the-badge&logo=css&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white) ![Google Sheets](https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=googlesheets&logoColor=white) |
+| Version control | ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) |
+
+**📚 Learning and practising: labs and coursework, not production experience yet**
+
+| Area | Tools and topics |
+| :-- | :-- |
+| Cloud | ![AWS][b-aws] ![Google Cloud](https://img.shields.io/badge/Google_Cloud-0f2b46?style=for-the-badge&logo=googlecloud&logoColor=ffd28a) <br/> EC2 · S3 · VPC · IAM · ECR · Route 53 · Secrets Manager · CloudWatch · Google Cloud Skills Boost labs |
+| Systems | ![Linux](https://img.shields.io/badge/Linux-0f2b46?style=for-the-badge&logo=linux&logoColor=ffd28a) ![Ubuntu](https://img.shields.io/badge/Ubuntu-0f2b46?style=for-the-badge&logo=ubuntu&logoColor=ffd28a) ![Kali Linux](https://img.shields.io/badge/Kali_Linux-0f2b46?style=for-the-badge&logo=kalilinux&logoColor=ffd28a) ![Bash](https://img.shields.io/badge/Bash-0f2b46?style=for-the-badge&logo=gnubash&logoColor=ffd28a) <br/> Windows Server |
+| Networking | TCP/IP · DNS · DHCP · HTTP/HTTPS · VPC subnetting · routing tables · firewalls · security groups |
+| Data & tools | ![MySQL](https://img.shields.io/badge/MySQL-0f2b46?style=for-the-badge&logo=mysql&logoColor=ffd28a) ![VMware](https://img.shields.io/badge/VMware-0f2b46?style=for-the-badge&logo=vmware&logoColor=ffd28a) ![VirtualBox](https://img.shields.io/badge/VirtualBox-0f2b46?style=for-the-badge&logo=virtualbox&logoColor=ffd28a) |
+
+<details>
+<summary><b>🔎 Where to see each hands-on skill</b></summary>
+<br/>
+
+| Skill | Where to see it |
+| :-- | :-- |
+| Python, Flask | [`app/app.py`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/app/app.py) |
+| Unit testing (`unittest`) | [`app/test_app.py`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/app/test_app.py) |
+| Docker, Gunicorn | [`docker/Dockerfile`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/docker/Dockerfile) |
+| GitHub Actions CI, Trivy | [`.github/workflows/ci-cd.yml`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.github/workflows/ci-cd.yml) |
+| Terraform (provider setup only so far) | [`provider.tf`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/provider.tf) |
+| Secrets hygiene in Git | [`.gitignore`](https://github.com/MOHDSAUD888/Secure-cloud-devsecops/blob/main/.gitignore) |
+| HTML, CSS, JavaScript | [`index.html`](index.html), [`styles.css`](assets/css/styles.css), [`main.js`](assets/js/main.js) |
+| Google Sheets as a lightweight CMS | [`data.js`](assets/js/data.js) and the loader in [`main.js`](assets/js/main.js) |
+
+</details>
+
+---
+
+## 🧭 My Journey
+
+<img align="right" width="170" src="assets/img/about-profile.webp" alt="Portrait of Mohd Saud"/>
+
+I started in automobiles. After a Diploma in Automobile Engineering, I spent **nearly 4 years as a Service Advisor** at an authorised Maruti Suzuki dealership in Lucknow, the link between customers and a busy workshop. That job built the habits I bring to Cloud / DevOps work: handling escalations, coordinating across people, keeping documentation accurate, working under pressure and owning the outcome.
+
+I hold a **B.Tech in Computer Science & Engineering** from AKTU, and I'm learning Cloud and DevOps by building small projects in public. Long term, I want to specialise in **Cloud Security**.
+
+- **Building:** [SecureOps Dashboard](#-secureops-dashboard-a-devsecops-pipeline), a DevSecOps CI pipeline
+- **Learning:** AWS (preparing for Solutions Architect – Associate), Terraform, Linux and networking, Google Cloud Skills Boost labs
+- **Ask me about:** switching from automobiles to tech, Docker, CI pipelines
+
+<br clear="right"/>
+
+| When | Milestone |
+| :-- | :-- |
+| **2018** | Diploma in Automobile Engineering, Integral University, Lucknow |
+| **Sep 2019 – May 2023** | Service Advisor, Oneup Motors India Pvt. Ltd. (authorised Maruti Suzuki dealership), Lucknow · 3 years 8 months |
+| **June 2026** | B.Tech, Computer Science & Engineering, Dr. A.P.J. Abdul Kalam Technical University (AKTU), Lucknow |
+
+---
+
+## 🤝 Let's Connect
+
+I'm open to **entry-level Cloud / DevOps roles and internships**. If you're hiring, or just want to talk about cloud, I'd love to hear from you.
+
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:ff9900,50:0f2b46,100:0d1117&height=120&section=footer&text=Building%20secure%20cloud%2C%20one%20commit%20at%20a%20time&fontSize=18&fontColor=ffffff&animation=fadeIn&fontAlignY=65" width="100%"/>
+
+[![LinkedIn][b-linkedin]](https://www.linkedin.com/in/mohdsaud1/)
+[![Email][b-email]](mailto:mosaud1997@icloud.com)
+[![Live portfolio][b-portfolio]](https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/)
+[![GitHub][b-github]](https://github.com/MOHDSAUD888)
+
 </div>
+
+---
+
+## 📂 About This Repository
+
+This repository is the source of my portfolio website. Everything you need to run, deploy or edit it is below.
+
+<details>
+<summary><b>📁 Project structure</b></summary>
+<br/>
+
+```text
+index.html              page structure (sections)
+assets/css/styles.css   all design (change --hue to change the theme colour)
+assets/js/data.js       default content + SHEET_URL setting
+assets/js/main.js       renders content, Google Sheet loader, animations
+assets/img/             photos (and project screenshots)
+assets/fonts/           Montserrat + Unbounded (self-hosted, no Google Fonts call)
+assets/pdf/             resume
+portfolio-data.xlsx     template for the Google Sheet
+```
+
+</details>
+
+<details>
+<summary><b>💻 Run locally</b></summary>
+<br/>
+
+No install needed. Any static file server works:
+
+```bash
+git clone https://github.com/MOHDSAUD888/Mohd-Saud_Portfolio-Website.git
+cd Mohd-Saud_Portfolio-Website
+python3 -m http.server 8000
+# open http://localhost:8000
+```
+
+</details>
+
+<details>
+<summary><b>🚀 Deploy for free with GitHub Pages</b></summary>
+<br/>
+
+1. Open the repo **Settings → Pages**.
+2. Source: **Deploy from a branch** → branch **`main`**, folder **`/ (root)`** → **Save**.
+3. After a minute or two the site is live at `https://mohdsaud888.github.io/Mohd-Saud_Portfolio-Website/`.
+
+</details>
+
+<details>
+<summary><b>📊 Edit content from Google Sheets (one-time setup)</b></summary>
+<br/>
+
+1. Upload [`portfolio-data.xlsx`](portfolio-data.xlsx) to Google Drive → open it → **File → Save as Google Sheets**.
+2. Click **Share** → General access: **Anyone with the link → Viewer**.
+3. Copy the sheet link and paste it into `SHEET_URL` at the top of [`assets/js/data.js`](assets/js/data.js). Commit and push.
+4. Done. Edit the sheet, then refresh the website.
+
+**Sheet rules**
+
+- Keep the tab names exactly: `Profile`, `Projects`, `Experience`, `Services`, `Testimonials`.
+- Do not rename the column headers (first row) or the `key` names in `Profile`.
+- Multiple items in one cell → separate them with commas (`AWS, Terraform, Docker`).
+- `visible` = `no` hides a row. Testimonials stay hidden until you add one.
+- In `about_text`, wrap words in `**double stars**` to highlight them in the theme colour (purple by default).
+- If a value disappears on the site, select the column → **Format → Number → Plain text**.
+- If the sheet can't be loaded, the site falls back to `data.js`, so the page still shows content.
+
+</details>
+
+<details>
+<summary><b>🖼️ Add a project screenshot</b></summary>
+<br/>
+
+Put the image in `assets/img/` (for example `project-1.png`) and write `assets/img/project-1.png` in the `image` column of the `Projects` tab.
+
+</details>
+
+<details>
+<summary><b>🎨 Change the theme colour</b></summary>
+<br/>
+
+Open [`assets/css/styles.css`](assets/css/styles.css) and change `--hue` at the top (default `255`). Every accent colour on the site is derived from it.
+
+</details>
+
+<details>
+<summary><b>🙏 Credits</b></summary>
+<br/>
+
+- Layout inspired by [Habib Ur Rehman's portfolio](https://habib277672.github.io/Personal-Portfolio/).
+- Built with AI pair-programming (Claude).
+- Fonts: Montserrat and Unbounded (self-hosted).
+- Icons: Remix Icon (inline SVG sprite in `index.html`).
+
+</details>
+
+<!-- ============================== FOOTER ============================== -->
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=wave&color=0:ff9900,50:0f2b46,100:0d1117&height=160&section=footer&text=Thanks%20for%20stopping%20by&fontSize=22&fontColor=ffffff&animation=fadeIn&fontAlignY=80" width="100%" alt="Thanks for stopping by"/>
+</div>
+
+<!--
+  GitHub stats cards: hidden for now. Re-enable once there is more public activity.
+
+  <div align="center">
+    <img height="170" src="https://github-readme-stats.vercel.app/api?username=MOHDSAUD888&show_icons=true&hide_border=true&bg_color=0d1117&title_color=ff9900&icon_color=ff9900&text_color=ffd28a" alt="GitHub stats"/>
+    <img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MOHDSAUD888&layout=compact&hide_border=true&bg_color=0d1117&title_color=ff9900&text_color=ffd28a" alt="Top languages"/>
+  </div>
+-->
+
+<!-- Badge definitions. The custom icons are Remix Icon glyphs taken from this site's own SVG sprite (index.html). -->
+[b-ci]: https://img.shields.io/github/actions/workflow/status/MOHDSAUD888/Secure-cloud-devsecops/ci-cd.yml?branch=main&style=for-the-badge&label=SecureOps%20CI&logo=githubactions&logoColor=white&labelColor=0f2b46
+[b-status]: https://img.shields.io/badge/Status-Open_to_Cloud_%2F_DevOps_roles-ffd28a?style=for-the-badge&labelColor=0f2b46&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmOTkwMCIgZD0iTTcgNVYyQzcgMS40IDcuNCAxIDggMUgxNkMxNi42IDEgMTcgMS40IDE3IDJWNUgyMUMyMS42IDUgMjIgNS40IDIyIDZWMjBDMjIgMjAuNiAyMS42IDIxIDIxIDIxSDNDMi40IDIxIDIgMjAuNiAyIDIwVjZDMiA1LjQgMi40IDUgMyA1SDdaTTE1IDdIOVYxOUgxNVY3Wk03IDdINFYxOUg3VjdaTTE3IDdWMTlIMjBWN0gxN1pNOSAzVjVIMTVWM0g5WiIvPjwvc3ZnPg%3D%3D
+[b-aws]: https://img.shields.io/badge/AWS-0f2b46?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmOTkwMCIgZD0iTTEyIDJDMTUuOSAyIDE5IDUuMSAxOSA5QzE5IDkuMSAxOSA5LjIgMTkgOS4zQzIxLjMgMTAuMiAyMyAxMi40IDIzIDE1QzIzIDE4LjMgMjAuMyAyMSAxNyAyMUg3QzMuNyAyMSAxIDE4LjMgMSAxNUMxIDEyLjQgMi43IDEwLjIgNSA5LjNDNSA5LjIgNSA5LjEgNSA5QzUgNS4xIDguMSAyIDEyIDJaTTEyIDRDOS4yIDQgNyA2LjIgNyA5QzcgOS4xIDcgOS4yIDcgOS4yTDcuMSAxMC43TDUuNyAxMS4yQzQuMSAxMS44IDMgMTMuMyAzIDE1QzMgMTcuMiA0LjggMTkgNyAxOUgxN0MxOS4yIDE5IDIxIDE3LjIgMjEgMTVDMjEgMTIuOCAxOS4yIDExIDE3IDExQzE1LjIgMTEgMTMuNyAxMi4xIDEzLjIgMTMuN0wxMS4zIDEzLjFDMTIuMSAxMC43IDE0LjMgOSAxNyA5QzE3IDYuMiAxNC44IDQgMTIgNFoiLz48L3N2Zz4%3D
+[b-wip]: https://img.shields.io/badge/Status-In_progress-ffd28a?style=for-the-badge&labelColor=0f2b46
+[b-done]: https://img.shields.io/badge/Status-Completed-238636?style=for-the-badge&labelColor=0f2b46
+[b-repo-secureops]: https://img.shields.io/badge/View_repository-0f2b46?style=for-the-badge&logo=github&logoColor=ffd28a
+[b-live]: https://img.shields.io/badge/Open_live_site-0f2b46?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZDI4YSIgZD0iTTE2IDkuNEw3LjQgMThMNiAxNi42TDE0LjYgOEg3VjZIMThWMTdIMTZWOS40WiIvPjwvc3ZnPg%3D%3D
+[b-linkedin]: https://img.shields.io/badge/LinkedIn-0f2b46?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZDI4YSIgZD0iTTYuOSA1QzYuOSA1LjggNi40IDYuNSA1LjcgNi45QzQuOSA3LjIgNC4xIDcgMy41IDYuNEMyLjkgNS44IDIuOCA0LjkgMy4xIDQuMkMzLjQgMy40IDQuMiAzIDUgM0M2LjEgMyA2LjkgMy45IDYuOSA1Wk03IDguNUgzVjIxSDdWOC41Wk0xMy4zIDguNUg5LjNWMjFIMTMuM1YxNC40QzEzLjMgMTAuOCAxOC4xIDEwLjQgMTguMSAxNC40VjIxSDIyVjEzLjFDMjIgNi45IDE0LjkgNy4xIDEzLjMgMTAuMkwxMy4zIDguNVoiLz48L3N2Zz4%3D
+[b-email]: https://img.shields.io/badge/Email-0f2b46?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZDI4YSIgZD0iTTMgM0gyMUMyMS42IDMgMjIgMy40IDIyIDRWMjBDMjIgMjAuNiAyMS42IDIxIDIxIDIxSDNDMi40IDIxIDIgMjAuNiAyIDIwVjRDMiAzLjQgMi40IDMgMyAzWk0yMCA3LjJMMTIuMSAxNC4zTDQgNy4yVjE5SDIwVjcuMlpNNC41IDVMMTIuMSAxMS43TDE5LjUgNUg0LjVaIi8%2BPC9zdmc%2B
+[b-portfolio]: https://img.shields.io/badge/Portfolio-0f2b46?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZDI4YSIgZD0iTTE2IDkuNEw3LjQgMThMNiAxNi42TDE0LjYgOEg3VjZIMThWMTdIMTZWOS40WiIvPjwvc3ZnPg%3D%3D
+[b-github]: https://img.shields.io/badge/GitHub-0f2b46?style=for-the-badge&logo=github&logoColor=ffd28a
