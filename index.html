@@ -1,110 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mohd Saud | Cloud &amp; DevOps Engineer</title>
-  <meta name="description" content="Portfolio of Mohd Saud, a B.Tech Computer Science student building hands-on Cloud, DevOps and Cloud Security skills." />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!-- NAVBAR -->
-  <header class="nav">
-    <a href="#home" class="logo">Mohd<span>.Saud</span></a>
-    <nav>
-      <ul id="menu">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#journey">Journey</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <div class="nav-actions">
-      <button id="theme-toggle" aria-label="Toggle dark and light theme">🌓</button>
-      <button id="menu-toggle" aria-label="Open menu">☰</button>
-    </div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mohd Saud | Cloud &amp; DevOps Engineer</title>
+    <meta
+      name="description"
+      content="Portfolio of Mohd Saud: Cloud & DevOps engineer in the making, working with AWS, Terraform, Docker, CI/CD and Cloud Security."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b6fe0'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='700' font-size='28' fill='white'%3EMS%3C/text%3E%3C/svg%3E"
+    />
 
-  <main>
-    <!-- HERO -->
-    <section id="home" class="hero">
-      <p class="eyebrow">Hi, I'm Mohd Saud 👋</p>
-      <h1>Building my path into <span class="grad">Cloud &amp; DevOps</span></h1>
-      <p class="typing"><span data-profile="tagline">I am learning</span> <span id="typed"></span><span class="cursor">|</span></p>
-      <p class="lead" data-profile="lead"></p>
-      <div class="cta">
-        <a class="btn primary" href="#projects">View Projects</a>
-        <a class="btn" href="resume.pdf" download>Download Resume</a>
-        <a class="btn ghost" href="#contact">Contact Me</a>
-      </div>
-    </section>
+    <!-- Remix Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css"
+    />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Unbounded:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
 
-    <!-- ABOUT -->
-    <section id="about">
-      <h2>About Me</h2>
-      <div class="two-col">
-        <p data-profile="about1"></p>
-        <p data-profile="about2"></p>
-      </div>
-      <ul class="path">
-        <li>Automobile Operations</li><li>B.Tech CSE</li><li>Technical Upskilling</li><li>Cloud / DevOps</li><li>Cloud Security</li>
-      </ul>
-    </section>
+  <body>
+    <!-- ==================== HEADER ==================== -->
+    <header class="header" id="header">
+      <div class="blob-animate"></div>
+      <nav class="nav container">
+        <a href="#" class="nav__logo" data-profile="logo">Mohd Saud</a>
+        <div class="nav__menu">
+          <ul class="nav__list">
+            <li><a href="#about" class="nav__link">About Me</a></li>
+            <li><a href="#projects" class="nav__link">Projects</a></li>
+            <li><a href="#contact" class="nav__link">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
 
-    <!-- SKILLS -->
-    <section id="skills">
-      <h2>Skills</h2>
-      <p class="sub">Honest levels: this shows what I am learning, not what I pretend to know.</p>
-      <div class="grid" id="skill-grid"></div>
-    </section>
+    <main class="main">
+      <!-- Custom cursor (hidden on touch screens) -->
+      <div class="cursor"></div>
 
-    <!-- PROJECTS -->
-    <section id="projects">
-      <h2>Projects</h2>
-      <p class="sub">Each project explains the problem, what I built, and what I learned.</p>
-      <div class="grid" id="project-grid">
-        <!-- Rendered by script.js from the projects array -->
-      </div>
-    </section>
+      <!-- ==================== HOME ==================== -->
+      <section class="home section section-top" id="home">
+        <div class="home__container container grid">
+          <div class="home__data">
+            <h3 class="home__greeting" data-profile="greeting">Hello, I'm</h3>
+            <h1 class="home__name">
+              <span data-profile="name_line1">Mohd</span><br />
+              <span data-profile="name_line2">Saud</span>
+            </h1>
+          </div>
 
-    <!-- JOURNEY -->
-    <section id="journey">
-      <h2>My Journey</h2>
-      <ol class="timeline">
-        <li>
-          <h3>Service Advisor</h3>
-          <p class="meta">Service Advisor · Oneup Motors (Maruti Suzuki), Lucknow · Sep 2019 – May 2023</p>
-          <p>Managed customer service in a high-volume workshop: coordinated with technicians, handled escalations, service documentation and billing.</p>
-        </li>
-        <li>
-          <h3>B.Tech in Computer Science</h3>
-          <p class="meta">AKTU, Lucknow · Graduated June 2026</p>
-          <p>Computer Science fundamentals, programming and problem solving. Earlier: Diploma in Automobile Engineering (2018).</p>
-        </li>
-        <li>
-          <h3>Cloud &amp; DevOps Upskilling</h3>
-          <p class="meta">Present</p>
-          <p>Linux, AWS, Terraform, Docker, CI/CD and DevSecOps projects. Preparing for AWS Solutions Architect Associate.</p>
-        </li>
-      </ol>
-    </section>
+          <div class="home__image">
+            <div class="blob-animate"></div>
+            <img
+              src="assets/img/hero-profile.webp"
+              alt="Mohd Saud sitting at his desk with a laptop"
+              class="home__profile"
+              width="840"
+              height="793"
+            />
+            <div class="home__shadow"></div>
+          </div>
 
-    <!-- CONTACT -->
-    <section id="contact">
-      <h2>Let's Connect</h2>
-      <p class="sub" data-profile="open_to"></p>
-      <div class="cta">
-        <button class="btn primary" id="copy-email" data-email="mosaud1997@icloud.com">Copy Email</button>
-        <a class="btn" id="link-github" href="#" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn" id="link-linkedin" href="#" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-      <p id="copy-msg" class="meta" role="status"></p>
-    </section>
-  </main>
+          <div class="home__info">
+            <h3 class="home__split" data-profile="hero_split">Aspiring</h3>
+            <h2 class="home__profession-1 split-text" data-profile="hero_profession1">Cloud DevOps</h2>
+            <h2 class="home__profession-2 split-text" data-profile="hero_profession2">Engineer</h2>
+          </div>
 
-  <footer>© <span id="year"></span> Mohd Saud. Built with plain HTML, CSS and JavaScript.</footer>
+          <div class="home__social">
+            <a href="#" target="_blank" rel="noopener" class="home__social-link" id="social-linkedin" aria-label="LinkedIn">
+              <i class="ri-linkedin-fill"></i>
+            </a>
+            <a href="#" target="_blank" rel="noopener" class="home__social-link" id="social-github" aria-label="GitHub">
+              <i class="ri-github-line"></i>
+            </a>
+            <a href="#" class="home__social-link" id="social-email" aria-label="Email">
+              <i class="ri-mail-line"></i>
+            </a>
+          </div>
 
-  <script src="script.js"></script>
-</body>
+          <a href="assets/pdf/Mohd-Saud-Resume.pdf" download class="home__cv resume-link">
+            Resume <i class="ri-file-list-2-line"></i>
+          </a>
+        </div>
+      </section>
+
+      <!-- ==================== ABOUT ==================== -->
+      <section class="about section" id="about">
+        <div class="about__container container grid">
+          <div class="about__data">
+            <h2 class="section__title">
+              <span data-profile="about_title_highlight">Discipline</span>
+              <br />
+              <span class="plain" data-profile="about_title_rest">Builds Freedom</span>
+            </h2>
+            <p class="about__description" id="about-text"></p>
+            <a href="assets/pdf/Mohd-Saud-Resume.pdf" download class="button resume-link">
+              Resume <i class="ri-file-list-2-line"></i>
+            </a>
+          </div>
+
+          <div class="about__image">
+            <div class="blob-animate"></div>
+            <div class="blob-animate"></div>
+            <img
+              src="assets/img/about-profile.webp"
+              alt="Portrait of Mohd Saud in a navy suit"
+              class="about__profile"
+              width="768"
+              height="1220"
+              loading="lazy"
+            />
+            <div class="about__shadow"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PROJECTS ==================== -->
+      <section class="projects section" id="projects">
+        <h2 class="section__title">
+          I Build Real-World <br />
+          <span>Projects</span>
+        </h2>
+        <div class="projects__container container">
+          <div class="projects__track" id="projects-track">
+            <!-- Cards are created by main.js -->
+          </div>
+          <div class="projects__dots" id="projects-dots"></div>
+        </div>
+      </section>
+
+      <!-- ==================== WORK ==================== -->
+      <section class="work section" id="work">
+        <h2 class="section__title">
+          <span>My Journey</span>
+          <br />
+          Experience
+        </h2>
+        <div class="work__container container grid">
+          <div class="work__tabs">
+            <button class="work__button work-active" data-target="#experience">
+              Experience <i class="ri-briefcase-3-line"></i>
+            </button>
+            <button class="work__button" data-target="#education">
+              Education <i class="ri-graduation-cap-line"></i>
+            </button>
+          </div>
+
+          <div class="work__area">
+            <div class="work__line"></div>
+            <div class="work__content work-active" data-content id="experience"></div>
+            <div class="work__content" data-content id="education"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SERVICES ==================== -->
+      <section class="services section" id="services">
+        <h2 class="section__title">What I <span>Offer</span></h2>
+        <div class="services__container container grid" id="services-container">
+          <!-- Cards are created by main.js -->
+        </div>
+      </section>
+
+      <!-- ==================== TESTIMONIALS (hidden until real ones are added) ==================== -->
+      <section class="testimonials section" id="testimonials" hidden>
+        <h2 class="section__title">
+          <span>What They Say</span>
+          <br />
+          About Me
+        </h2>
+        <div class="testimonials__container grid">
+          <div class="testimonials__content" id="testimonials-track"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CONTACT ==================== -->
+      <section class="contact section" id="contact">
+        <div class="contact__container container grid">
+          <div class="contact__data">
+            <h2 class="section__title">Contact <span>Me</span></h2>
+            <p class="contact__description" data-profile="contact_text"></p>
+            <button class="button contact__button" id="contact-btn">
+              Copy email <i class="ri-file-copy-line"></i>
+            </button>
+          </div>
+
+          <div class="contact__content grid">
+            <div class="contact__info grid">
+              <div>
+                <h3 class="contact__title">Email</h3>
+                <address class="contact__address" data-profile="email"></address>
+              </div>
+              <div>
+                <h3 class="contact__title">Location</h3>
+                <address class="contact__address" data-profile="location"></address>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="contact__title">Social</h3>
+              <div class="contact__links">
+                <a href="#" target="_blank" rel="noopener" class="contact__link" id="contact-linkedin">
+                  LinkedIn <i class="ri-linkedin-box-line"></i>
+                </a>
+                <a href="#" target="_blank" rel="noopener" class="contact__link" id="contact-github">
+                  GitHub <i class="ri-github-line"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="contact__write">
+              <h3 class="contact__title">Write Me</h3>
+              <div class="contact__links">
+                <a href="#" class="contact__link" id="contact-mail">
+                  Email <i class="ri-mail-send-line"></i>
+                </a>
+                <a href="#" target="_blank" rel="noopener" class="contact__link" id="contact-whatsapp">
+                  WhatsApp <i class="ri-whatsapp-line"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer grid">
+      <div class="blob-animate"></div>
+      <p class="footer__copy">
+        &copy; <span class="footer__year" id="footer-year"></span>
+        <span data-profile="logo">Mohd Saud</span>. All rights reserved.
+      </p>
+    </footer>
+
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
 </html>
