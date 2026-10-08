@@ -435,6 +435,12 @@ function startSwiper(count) {
 }
 
 /*=============== WORK TABS ===============*/
+// ADDED: ScrollReveal measures where each section is only on load and on window
+// resize. Switching tabs or opening a service card changes the page height, so
+// the sections below move; a "resize" event makes it measure them again.
+// Without it, Skills and Contact could stay invisible after picking "Education".
+const refreshReveal = () => window.dispatchEvent(new Event("resize"));
+
 const tabs = document.querySelectorAll("[data-target]"),
   tabContents = document.querySelectorAll("[data-content]");
 
@@ -448,6 +454,7 @@ tabs.forEach((tab) => {
     tab.classList.add("work-active");
     targetContent.classList.add("work-active");
     tabs.forEach((t) => t.setAttribute("aria-pressed", String(t === tab)));
+    refreshReveal();
   });
 });
 
@@ -476,7 +483,9 @@ function setServiceOpen(card, open) {
 
 // After opening, switch to height:auto so the skills can re-wrap when the window is resized
 $("#services-container").addEventListener("transitionend", (e) => {
-  if (e.propertyName === "height" && e.target.closest(".services__open")) e.target.style.height = "auto";
+  if (e.propertyName !== "height") return;
+  if (e.target.closest(".services__open")) e.target.style.height = "auto";
+  refreshReveal(); // the card grew or shrank, so Contact moved
 });
 
 /*=============== COPY EMAIL IN CONTACT ===============*/
