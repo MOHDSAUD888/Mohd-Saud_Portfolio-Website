@@ -15,13 +15,6 @@
   font-weight: 400 600;
   font-display: swap;
 }
-/* ADDED: hero text font */
-@font-face {
-  font-family: "Sora";
-  src: url("../fonts/sora-latin.woff2") format("woff2");
-  font-weight: 100 800;
-  font-display: swap;
-}
 
 /*=============== VARIABLES CSS ===============*/
 :root {
@@ -55,7 +48,6 @@
   /*.5rem = 8px | 1rem = 16px ...*/
   --body-font: "Montserrat", sans-serif;
   --second-font: "Unbounded", sans-serif;
-  --hero-font: "Sora", var(--second-font); /* ADDED */
   --biggest-font-size: 2rem;
   --bigger-font-size: 1.75rem;
   --h1-font-size: 1.5rem;
@@ -1608,38 +1600,6 @@ html {
   }
   .projects__placeholder {
     border-radius: 2rem;
-  }
-}
-
-/* Hero typography: Sora, medium purple intro lines, bold white display lines */
-.home__greeting,
-.home__name,
-.home__split,
-.home__role {
-  font-family: var(--hero-font);
-}
-.home__greeting,
-.home__split {
-  font-weight: var(--font-medium);
-  letter-spacing: -0.01em;
-}
-.home__name,
-.home__role {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-.home__name {
-  line-height: 1.05;
-}
-.home__profession-1,
-.home__profession-2 {
-  line-height: 1.2;
-}
-@media screen and (min-width: 1150px) {
-  .home__name,
-  .home__profession-1,
-  .home__profession-2 {
-    font-size: 3.5rem;
   }
 }
 
